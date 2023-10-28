@@ -13,7 +13,6 @@ function createGenreSelectionIncomeTreeMap(data) {
         const selectedGenre = this.value;
         console.log("Selected Genre: " + selectedGenre);
         let filteredData = filterDataByGenre(data, [selectedGenre])
-        console.log("filtered data: ", filteredData);
         createGrossIncomeTreeMap(filteredData);
     });
     createGrossIncomeTreeMap(data);
@@ -112,13 +111,17 @@ function connectGenreSelectionToLinePlot(data) {
 
 function filterDataByGenre(data, genresAsArray) {
     let filteredData;
-    if (genresAsArray === "all") {
-        //filteredData = data;
+    console.log("genres as array: ", genresAsArray);
+    // TODO: check if any value in array is "all"
+    if (genresAsArray[0] === "all") {
+        console.log("all genres selected")
         filteredData = data.slice();
     } else {
         // TODO: look at all genres in array
         filteredData = data.filter(d => d.genre.includes(genresAsArray[0]));
     }
+    console.log("data after filtering: ", data)
+    console.log("filtered data: ", filteredData)
     return filteredData;
 }
 
