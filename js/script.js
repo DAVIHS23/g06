@@ -1,13 +1,7 @@
 d3.csv("data/movies-originalDataset.csv", function (data) {
     console.log("data loaded")
 
-    //fillGenreDropdowns(data);
-    //createGenreDropdown(data);
-
     createGenreSelectionIncomeTreeMap(data);
-
-    //////////////////////////////////////////////////
-    // line plot releases per year
 
 
 })
@@ -52,56 +46,6 @@ function createGenreSelectionIncomeTreeMap(data) {
     createGrossIncomeTreeMap(data);
 }
 
-function fillGenreDropdowns(data) {
-    console.log("fill genre drop downs");
-    let genres = []
-    data.forEach(d => {
-        if (d.genre) {
-            d.genre.split(",").forEach(g => {
-                if (!genres.includes(g)) {
-                    genres.push(g);
-                }
-            });
-        }
-    });
-    genres.sort();
-    console.log("genres: ", genres);
-    const genreDropdowns = document.querySelectorAll('.genreSelection');
-    genreDropdowns.forEach((dropdown) => {
-        genres.forEach((genre) => {
-            const option = document.createElement('option');
-            option.value = genre;
-            option.textContent = genre;
-            dropdown.appendChild(option);
-        });
-    });
-}
-
-function createGenreDropdown(data) {
-    console.log("create genre drop downs");
-    var genres = []
-    data.forEach(d => {
-        if (d.genre) {
-            d.genre.split(",").forEach(g => {
-                if (!genres.includes(g)) {
-                    genres.push(g);
-                }
-            });
-        }
-    });
-    genres.sort();
-    console.log("genres: ", genres);
-    const genreDropdowns = document.querySelectorAll('.genreSelection');
-    genreDropdowns.forEach((dropdown) => {
-        genres.forEach((genre) => {
-            const option = document.createElement('option');
-            option.value = genre;
-            option.textContent = genre;
-            dropdown.appendChild(option);
-        });
-    });
-}
-
 function createGrossIncomeTreeMap(data) {
     console.log("tree map sorted after income");
     const treeMapWidth = 600;
@@ -109,8 +53,6 @@ function createGrossIncomeTreeMap(data) {
 
     console.log("created svg container - start sorting");
     data.sort((a, b) => b.gross - a.gross);
-
-    //data = filterDataByGenres(data, [document.getElementById("genreSelectionIncomeTreeMap").value]);
 
     data = data.slice(0, 10);
     console.log(data);
@@ -155,22 +97,4 @@ function createGrossIncomeTreeMap(data) {
         .style("text-anchor", "middle")
         .style("font-size", "10px")
         .style("fill", "white");
-}
-
-function filterDataByGenres(data, genresAsArray) {
-    console.log("genre filter: " + genresAsArray);
-    if (genresAsArray.length > 0) {
-        data = data.filter(d => {
-            if (d.genre) {
-                const genres = d.genre.split(",");
-                for (let i = 0; i < genres.length; i++) {
-                    if (genresAsArray.includes(genres[i])) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        });
-    }
-    return data
 }
