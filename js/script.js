@@ -162,7 +162,9 @@ function createLinePlot(data) {
     svg.append("path")
         .datum(yearsData)
         .attr("class", "line")
-        .attr("d", line);
+        .attr("d", line)
+        .attr("stroke", "green")
+        .attr("fill", "none");
 
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
