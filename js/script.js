@@ -186,7 +186,7 @@ function createLinePlot(data) {
         .attr("y", 6)
         .attr("dy", ".75em")
         .attr("transform", "rotate(-90)")
-        .text("Number of Data Points");
+        .text("Realses");
 
     svg.append("text")
         .attr("x", width / 2)
