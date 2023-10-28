@@ -49,6 +49,8 @@ function createLinePlot(data, selectedGenre) {
         } else {
             filteredData = data.filter(d => d.genre.includes(selectedGenre));
         }
+
+    console.log(filteredData.length)
     
 
 
