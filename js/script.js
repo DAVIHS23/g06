@@ -7,7 +7,7 @@ d3.csv("data/movies-originalDataset.csv", function (data) {
     connectGenreSelectionToLinePlot(data);
 
 
-    
+
 })
 
 function createGenreSelectionIncomeTreeMap(data) {
@@ -106,30 +106,32 @@ function fillGenreSelections(data) {
 
 function initializeSliders(data) {
     const ratingSlider = document.getElementById('ratingSlider');
-
+    let displayminRating = d3.min(data, d => d.rating);
+    let displaymaxRating = d3.max(data, d => d.rating);
+    let initialSliderValues = [displayminRating, displaymaxRating];
+    minRatingDisplay.textContent = "Min: " + displayminRating;
+    maxRatingDisplay.textContent = "Max: " + displaymaxRating;
     if (ratingSlider.noUiSlider) {
         ratingSlider.noUiSlider.destroy();
     }
-
     noUiSlider.create(ratingSlider, {
-        start: [1, 10],  
-        connect: true,   
-        step: 1,         
+        start: initialSliderValues,
+        connect: true,
+        step: 1,
         range: {
             min: 1,
             max: 10
         }
     });
 
+
+
     const ratingRange = document.getElementById('ratingRange');
     ratingSlider.noUiSlider.on('update', function (values, handle) {
         ratingRange.innerText = values.join(' - ');
-
         const minRating = parseInt(values[0]);
         const maxRating = parseInt(values[1]);
-
         const filteredData = data.filter(d => d.rating >= minRating && d.rating <= maxRating);
-
         createLinePlot(filteredData);
     });
 }
@@ -170,7 +172,6 @@ function filterDataByGenre(data, genresAsArray) {
 
 
 
-// Create a function to generate a line plot for the number of data points per year
 function createLinePlot(data) {
     d3.select(".numberOfMovies").html("");
 
