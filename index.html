@@ -1,33 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top Movies</title>
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/d3.v4.min.js"></script>
-    <script src="js/script.js"></script>
-    <link rel="stylesheet" href="style/bootstrap.min.css">
-    <link rel="stylesheet" href="style/style.css">
-</head>
-<body>
-    <h1>Top Movies</h1>
-    <h2>Highest Grossing Movies</h2>
-    <div>
-        <label for="genreSelectionIncomeTreeMap">Genre:</label>
-        <select name="genreSelectionIncomeTreeMap" id="genreSelectionIncomeTreeMap" class="genreSelection">
-            <option value="all">All Genres</option>
-        </select>
-    </div>
-    <div class="incomeTreeMap"></div>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Top Movies</title>
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="js/d3.v4.min.js"></script>
+        <script src="js/script.js"></script>
+        <link rel="stylesheet" href="style/bootstrap.min.css">
+        <link rel="stylesheet" href="style/style.css">
+        <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/nouislider@14.6.0/distribute/nouislider.min.css">
+        <script
+            src="https://cdn.jsdelivr.net/npm/nouislider@14.6.0/distribute/nouislider.min.js"></script>
+    </head>
+    <body>
+        <h1>Top Movies</h1>
+        <h2>Highest Grossing Movies</h2>
+        <div>
+            <label for="genreSelectionIncomeTreeMap">Genre:</label>
+            <select name="genreSelectionIncomeTreeMap"
+                id="genreSelectionIncomeTreeMap" class="genreSelection">
+                <option value="all">All Genres</option>
+            </select>
+        </div>
+        <div class="incomeTreeMap"></div>
 
-    <h2>Number of movies over the years</h2>
-    <div>
-        <label for="genreSelectionNumberOfMovies">Genre:</label>
-        <select name="genreSelectionNumberOfMovies" id="genreSelectionNumberOfMovies" class="genreSelection">
-            <option value="all">All Genres</option>
-        </select>
-    </div>
-    <div class="numberOfMovies"></div>
-</body>
+        <h2>Number of movies over the years</h2>
+
+        <div class="container mt-5">
+            <h1 class="text-center">Movie Ratings Range</h1>
+
+            <div class="row mt-3">
+                <div class="col-md-8 offset-md-2">
+                    <div id="ratingSlider"></div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-8 offset-md-2">
+                    <p class="text-center">Selected Range: <span
+                            id="ratingRange">1 - 10</span></p>
+                </div>
+            </div>
+        </div>
+
+       
+        <div>
+            <label for="genreSelectionNumberOfMovies">Genre:</label>
+            <select name="genreSelectionNumberOfMovies"
+                id="genreSelectionNumberOfMovies" class="genreSelection">
+                <option value="all">All Genres</option>
+            </select>
+        </div>
+        <div class="numberOfMovies"></div>
+
+    </body>
 </html>

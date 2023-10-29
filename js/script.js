@@ -5,6 +5,9 @@ d3.csv("data/movies-originalDataset.csv", function (data) {
     createGenreSelectionIncomeTreeMap(data);
 
     connectGenreSelectionToLinePlot(data);
+
+
+    
 })
 
 function createGenreSelectionIncomeTreeMap(data) {
@@ -17,6 +20,9 @@ function createGenreSelectionIncomeTreeMap(data) {
     });
     createGrossIncomeTreeMap(data);
 }
+
+
+
 
 function createGrossIncomeTreeMap(filteredData) {
     d3.select(".incomeTreeMap").html("");
@@ -97,6 +103,37 @@ function fillGenreSelections(data) {
     });
 }
 
+
+function initializeSliders(data) {
+    const ratingSlider = document.getElementById('ratingSlider');
+
+    if (ratingSlider.noUiSlider) {
+        ratingSlider.noUiSlider.destroy();
+    }
+
+    noUiSlider.create(ratingSlider, {
+        start: [1, 10],  
+        connect: true,   
+        step: 1,         
+        range: {
+            min: 1,
+            max: 10
+        }
+    });
+
+    const ratingRange = document.getElementById('ratingRange');
+    ratingSlider.noUiSlider.on('update', function (values, handle) {
+        ratingRange.innerText = values.join(' - ');
+
+        const minRating = parseInt(values[0]);
+        const maxRating = parseInt(values[1]);
+
+        const filteredData = data.filter(d => d.rating >= minRating && d.rating <= maxRating);
+
+        createLinePlot(filteredData);
+    });
+}
+
 function connectGenreSelectionToLinePlot(data) {
     select = d3.select("#genreSelectionNumberOfMovies");
     select.on("change", function () {
@@ -105,8 +142,12 @@ function connectGenreSelectionToLinePlot(data) {
         let filteredData = filterDataByGenre(data, [selectedGenre])
         console.log("filtered data: ", filteredData);
         createLinePlot(filteredData);
+        initializeSliders(filteredData);
     });
+
     createLinePlot(data);
+    initializeSliders(data);
+
 }
 
 function filterDataByGenre(data, genresAsArray) {
@@ -124,6 +165,10 @@ function filterDataByGenre(data, genresAsArray) {
     console.log("filtered data: ", filteredData)
     return filteredData;
 }
+
+
+
+
 
 // Create a function to generate a line plot for the number of data points per year
 function createLinePlot(data) {
@@ -193,5 +238,5 @@ function createLinePlot(data) {
         .attr("y", 0 - (margin.top / 2))
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
-        //.text(`Number of Data Points for Genre: ${selectedGenre}`);
+    //.text(`Number of Data Points for Genre: ${selectedGenre}`);
 }
