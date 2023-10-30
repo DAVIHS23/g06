@@ -1,0 +1,20 @@
+body {
+    background-color: #FEFEFE;
+}
+#topCarousel {
+    max-height: 50vh;
+    overflow: hidden;
+}
+.carousel-caption {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+svg {
+    max-width: 100%;
+    width:100% !important;
+    display: block!important;
+    height: auto;
+}

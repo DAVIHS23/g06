@@ -1,3 +1,7 @@
+// bootstrap js
+var myCarousel = new bootstrap.Carousel(document.querySelector('#topCarousel'));
+
+// d3 js
 d3.csv("data/movies-originalDataset.csv", function (data) {
     console.log("data loaded")
     fillGenreSelections(data);

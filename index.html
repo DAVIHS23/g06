@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,24 +11,56 @@
     <link rel="stylesheet" href="style/bootstrap.min.css">
     <link rel="stylesheet" href="style/style.css">
 </head>
+
 <body>
-    <h1>Top Movies</h1>
-    <h2>Highest Grossing Movies</h2>
-    <div>
+    <div id="topCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="img/movieBackground.jpg" alt="Movie Posters" class="d-block w-100">
+                <div class="carousel-caption d-none d-md-block">
+                    <h1 class="text-center">Top Movies and Genres</h1>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="img/movieBackground2.jpg" alt="More Movie Posters" class="d-block w-100">
+                <div class="carousel-caption d-none d-md-block">
+                    <h1 class="text-center">Top Movies and Genres</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="">
+        <h2>Highest Grossing Movies</h2>
         <label for="genreSelectionIncomeTreeMap">Genre:</label>
         <select name="genreSelectionIncomeTreeMap" id="genreSelectionIncomeTreeMap" class="genreSelection">
             <option value="all">All Genres</option>
         </select>
-    </div>
-    <div class="incomeTreeMap"></div>
+        <div class="incomeTreeMap"></div>
+    </div> -->
 
-    <h2>Number of movies over the years</h2>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-8 col-lg-6 mx-auto">
+                <h2 class="text-center mt-3">Highest Grossing Movies</h2>
+                <div class="d-flex justify-content-between mt-3">
+                    <label for="genreSelectionIncomeTreeMap">Genre:</label>
+                    <select name="genreSelectionIncomeTreeMap" id="genreSelectionIncomeTreeMap" class="genreSelection">
+                        <option value="all">All Genres</option>
+                    </select>
+                </div>
+                <div class="incomeTreeMap mt-3"></div>
+            </div>
+        </div>
+    </div>
+
     <div>
+        <h2>Number of movies over the years</h2>
         <label for="genreSelectionNumberOfMovies">Genre:</label>
         <select name="genreSelectionNumberOfMovies" id="genreSelectionNumberOfMovies" class="genreSelection">
             <option value="all">All Genres</option>
         </select>
+        <div class="numberOfMovies"></div>
     </div>
-    <div class="numberOfMovies"></div>
 </body>
+
 </html>
