@@ -53,14 +53,34 @@
         </div>
     </div>
 
+    <div class="container mt-5">
+        <h1 class="text-center">Movie Ratings Range</h1>
+        <div class="row mt-3">
+            <div class="col-md-8">
+                <div id="ratingSlider"></div>
+            </div>
+            <div class="col-md-4">
+                <div id="ratingRangeDisplay">
+                    <span id="minRatingDisplay">Min: 1</span>
+                    <span id="maxRatingDisplay">Max: 10</span>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-8 offset-md-2">
+                <p class="text-center">Selected Range: <span id="ratingRange">1 - 10</span></p>
+            </div>
+        </div>
+    </div>
+
     <div>
-        <h2>Number of movies over the years</h2>
         <label for="genreSelectionNumberOfMovies">Genre:</label>
-        <select name="genreSelectionNumberOfMovies" id="genreSelectionNumberOfMovies" class="genreSelection">
+        <select name="genreSelectionNumberOfMovies"
+            id="genreSelectionNumberOfMovies" class="genreSelection">
             <option value="all">All Genres</option>
         </select>
-        <div class="numberOfMovies"></div>
     </div>
+    <div class="numberOfMovies"></div>
 </body>
 
 </html>
