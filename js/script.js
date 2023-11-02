@@ -9,6 +9,7 @@ d3.csv("data/movies-originalDataset.csv", function (data) {
     createGenreSelectionIncomeTreeMap(data);
 
     connectGenreSelectionToLinePlot(data);
+    createLinePlotGross(data);
 })
 
 function createGenreSelectionIncomeTreeMap(data) {
@@ -235,3 +236,77 @@ function createLinePlot(data) {
         .style("font-size", "16px")
     //.text(`Number of Data Points for Genre: ${selectedGenre}`);
 }
+
+function createLinePlotGross(data) {
+    d3.select(".incomePerYear").html("");
+
+    const yearsData = d3.nest()
+        .key(d => d.year)
+        .rollup(values => d3.sum(values, d => d.gross))
+        .entries(data);
+
+    console.log(yearsData)
+
+    yearsData.sort((a, b) => d3.ascending(a.key, b.key));
+
+    const margin = { top: 20, right: 20, bottom: 30, left: 50 },
+        width = 600 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
+
+    const svg = d3.select(".incomePerYear")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    const x = d3.scaleLinear()
+        .domain([d3.min(yearsData, d => +d.key), d3.max(yearsData, d => +d.key)])
+        .range([0, width]);
+
+    const y = d3.scaleLinear()
+        .domain([0, d3.max(yearsData, d => +d.value)])
+        .range([height, 0]);
+
+    const line = d3.line()
+        .x(d => x(+d.key))
+        .y(d => y(+d.value));
+
+    svg.append("path")
+        .datum(yearsData)
+        .attr("class", "line")
+        .attr("d", line)
+        .attr("stroke", "green")
+        .attr("fill", "none");
+
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+
+    svg.append("g")
+        .call(d3.axisLeft(y));
+
+    svg.append("text")
+        .attr("class", "x label")
+        .attr("text-anchor", "end")
+        .attr("x", width)
+        .attr("y", height - 6)
+        .text("Year");
+
+    svg.append("text")
+        .attr("class", "y label")
+        .attr("text-anchor", "end")
+        .attr("y", 6)
+        .attr("dy", ".75em")
+        .attr("transform", "rotate(-90)")
+        .text("Gross");
+
+    svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px");
+}
+
+
+
