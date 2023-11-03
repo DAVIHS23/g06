@@ -9,7 +9,7 @@ d3.csv("data/movies-originalDataset.csv", function (data) {
     createGenreSelectionIncomeTreeMap(data);
 
     connectGenreSelectionToLinePlot(data);
-    createLinePlotGross(data);
+    
 })
 
 function createGenreSelectionIncomeTreeMap(data) {
@@ -132,6 +132,7 @@ function initializeSliders(data) {
         const maxRating = parseInt(values[1]);
         const filteredData = data.filter(d => d.rating >= minRating && d.rating <= maxRating);
         createLinePlot(filteredData);
+        createLinePlotGross(filteredData);
     });
 }
 
@@ -143,10 +144,12 @@ function connectGenreSelectionToLinePlot(data) {
         let filteredData = filterDataByGenre(data, [selectedGenre])
         console.log("filtered data: ", filteredData);
         createLinePlot(filteredData);
+        createLinePlotGross(filteredData);
         initializeSliders(filteredData);
     });
 
     createLinePlot(data);
+    createLinePlotGross(data);
     initializeSliders(data);
 
 }
@@ -242,10 +245,10 @@ function createLinePlotGross(data) {
 
     const yearsData = d3.nest()
         .key(d => d.year)
-        .rollup(values => d3.sum(values, d => d.gross))
+        .rollup(values => d3.mean(values, d => d.gross)) 
         .entries(data);
 
-    console.log(yearsData)
+    console.log(yearsData);
 
     yearsData.sort((a, b) => d3.ascending(a.key, b.key));
 
@@ -299,7 +302,7 @@ function createLinePlotGross(data) {
         .attr("y", 6)
         .attr("dy", ".75em")
         .attr("transform", "rotate(-90)")
-        .text("Gross");
+        .text("Average Gross");
 
     svg.append("text")
         .attr("x", width / 2)
@@ -307,6 +310,7 @@ function createLinePlotGross(data) {
         .attr("text-anchor", "middle")
         .style("font-size", "16px");
 }
+
 
 
 
