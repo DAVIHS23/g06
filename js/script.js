@@ -12,8 +12,9 @@ d3.csv("data/movies-originalDataset.csv", function (data) {
     connectGenreSelectionToLinePlot(data);
     connectYearSelectionToScatterPlot(data);
     createScatterPlotGrossRating(data);
-    
-    
+    // setupHoverEvent(data);
+
+
 })
 
 function createGenreSelectionIncomeTreeMap(data) {
@@ -185,12 +186,12 @@ function connectGenreSelectionToLinePlot(data) {
 function connectYearSelectionToScatterPlot(data) {
     const select = d3.select("#yearSelection");
     select.on("change", function () {
-        const selectedYear = +this.value;
+        const selectedYear = this.value;
         console.log("Selected Year: " + selectedYear);
-        
-        const filteredData = data.filter(d => +d.year === selectedYear)
+        const filteredData = filterDataByYear(data, selectedYear);
 
-        console.log("filtered data: ", filteredData);
+
+        console.log("filtered data year: ", filteredData);
         createScatterPlotGrossRating(filteredData);
     });
 
@@ -215,10 +216,26 @@ function filterDataByGenre(data, genresAsArray) {
     return filteredData;
 }
 
+function filterDataByYear(data, selectedYear) {
+    let filteredData;
+    console.log("Selected year: ", selectedYear);
+
+    if (selectedYear === "all" || isNaN(selectedYear)) {
+        console.log("Invalid year or 'all' selected");
+        filteredData = data.slice();
+    } else {
+
+        filteredData = data.filter(d => d.year === selectedYear);
+    }
+    console.log("Data after filtering year: ", data);
+    console.log("Filtered data year: ", filteredData);
+    return filteredData;
+}
+
 function createLinePlot(data) {
 
     d3.select(".numberOfMovies").html("");
-   
+
     const yearsData = d3.nest()
         .key(d => d.year)
         .rollup(values => values.length)
@@ -291,7 +308,7 @@ function createLinePlotGross(data) {
 
     const yearsData = d3.nest()
         .key(d => d.year)
-        .rollup(values => d3.mean(values, d => d.gross)) 
+        .rollup(values => d3.mean(values, d => d.gross))
         .entries(data);
 
     console.log(yearsData);
@@ -357,12 +374,31 @@ function createLinePlotGross(data) {
         .style("font-size", "16px");
 }
 
-function createScatterPlotGrossRating(data) {
-    // Filter the data to include only data points from the year 2000 and valid "gross" values
-    const filteredData = data.filter(d =>!isNaN(+d.gross) && +d.gross > 1);
 
-    // Find the maximum "gross" value in the filtered data
+function calculateLinearRegression(data) {
+    const validData = data.filter(d => !isNaN(+d.gross) && !isNaN(+d.rating));
+    if (validData.length < 2) {
+        return { slope: 0, intercept: 0 }; // Return a default value if there isn't enough valid data.
+    }
+
+    const n = validData.length;
+    const sumX = validData.reduce((acc, d) => acc + +d.gross, 0);
+    const sumY = validData.reduce((acc, d) => acc + +d.rating, 0);
+    const sumXY = validData.reduce((acc, d) => acc + (+d.gross * +d.rating), 0);
+    const sumX2 = validData.reduce((acc, d) => acc + (+d.gross * +d.gross), 0);
+
+    const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
+
+    return { slope, intercept };
+}
+
+function createScatterPlotGrossRating(data) {
+    const filteredData = data.filter(d => !isNaN(+d.gross) && +d.gross > 1);
+
     const maxGross = d3.max(filteredData, d => +d.gross);
+
+    const trendlineData = calculateLinearRegression(filteredData);
 
     d3.select(".scatterPlot").html("");
 
@@ -378,21 +414,58 @@ function createScatterPlotGrossRating(data) {
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
     const xScale = d3.scaleLinear()
-        .domain([0, maxGross]) // Set the x-axis domain to the maximum "gross" value
+        .domain([0, maxGross])
         .range([0, width]);
 
+    const minYRating = d3.min(filteredData, d => d.rating);
+    //const maxYRating = d3.max(filteredData, d => d.rating);
+
+    const yDomainLowerLimit = Math.max(minYRating - 0.5, 0);
+   // const yDomainUpperLimit = Math.min(maxYRating + 0.5, 10);
+
     const yScale = d3.scaleLinear()
-        .domain([0, d3.max(filteredData, d => d.rating)])
+        .domain([yDomainLowerLimit, 10])
         .range([height, 0]);
+
+
+    const tooltip = d3.select("body")
+        .append("div")
+        .style("position", "absolute")
+        .style("background", "white")
+        .style("border", "1px solid #ddd")
+        .style("padding", "5px")
+        .style("opacity", 0);
 
     svg.selectAll("circle")
         .data(filteredData)
         .enter()
         .append("circle")
-        .attr("cx", d => xScale(d.gross))
-        .attr("cy", d => yScale(d.rating))
-        .attr("r", 5);
+            .attr("cx", d => xScale(d.gross))
+            .attr("cy", d => yScale(d.rating))
+            .attr("r", 5)
+            .attr("fill", "black")
+            .style("fill", "#69b3a2")
+            .style("opacity", 0.9)
 
+        .on("mouseover", (event, index) => {
+            const d = filteredData[index];
+            if (d) {
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", 0.8);
+                tooltip.html(`Title: ${d.title}<br>Gross: ${d.gross}<br>Rating: ${d.rating}`)
+                    .style("top", d3.select(this).attr("cy") + "px")
+                    .style("left", d3.select(this).attr("cx") + "px")
+                  
+            }
+        })
+        .on("mouseout", () => {
+            tooltip.transition()
+                .duration(500)
+                .style("opacity", 0);
+        })
+   
+    
     svg.append("g")
         .attr("transform", `translate(0, ${height})`)
         .call(d3.axisBottom(xScale));
@@ -410,7 +483,17 @@ function createScatterPlotGrossRating(data) {
         .attr("x", -height / 2)
         .attr("y", -30)
         .text("Rating");
+
+    const trendline = svg.append("line")
+        .attr("x1", xScale(0))
+        .attr("y1", yScale(trendlineData.intercept))
+        .attr("x2", xScale(maxGross))
+        .attr("y2", yScale(maxGross * trendlineData.slope + trendlineData.intercept))
+        .attr("stroke", "red")
+        .attr("stroke-width", 2);
 }
+
+
 
 
 
