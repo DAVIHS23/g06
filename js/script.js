@@ -5,10 +5,14 @@
 d3.csv("data/movies-originalDataset.csv", function (data) {
     console.log("data loaded")
     fillGenreSelections(data);
+    fillYearSelections(data);
 
     createGenreSelectionIncomeTreeMap(data);
 
     connectGenreSelectionToLinePlot(data);
+    connectYearSelectionToScatterPlot(data);
+    createScatterPlotGrossRating(data);
+    
     
 })
 
@@ -102,6 +106,30 @@ function fillGenreSelections(data) {
     });
 }
 
+function fillYearSelections(data) {
+    const years = ["all"];
+    data.forEach((d) => {
+        if (d.year) {
+            const year = d.year.toString();
+            if (!years.includes(year)) {
+                years.push(year);
+            }
+        }
+    });
+    years.sort();
+
+    const yearDropdowns = document.querySelectorAll('.yearSelection');
+    yearDropdowns.forEach((dropdown) => {
+        years.forEach((year) => {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            dropdown.appendChild(option);
+        });
+    });
+}
+
+
 
 function initializeSliders(data) {
     const ratingSlider = document.getElementById('ratingSlider');
@@ -154,6 +182,23 @@ function connectGenreSelectionToLinePlot(data) {
 
 }
 
+function connectYearSelectionToScatterPlot(data) {
+    const select = d3.select("#yearSelection");
+    select.on("change", function () {
+        const selectedYear = +this.value;
+        console.log("Selected Year: " + selectedYear);
+        
+        const filteredData = data.filter(d => +d.year === selectedYear)
+
+        console.log("filtered data: ", filteredData);
+        createScatterPlotGrossRating(filteredData);
+    });
+
+    createScatterPlotGrossRating(data);
+}
+
+
+
 function filterDataByGenre(data, genresAsArray) {
     let filteredData;
     console.log("genres as array: ", genresAsArray);
@@ -171,8 +216,9 @@ function filterDataByGenre(data, genresAsArray) {
 }
 
 function createLinePlot(data) {
-    d3.select(".numberOfMovies").html("");
 
+    d3.select(".numberOfMovies").html("");
+   
     const yearsData = d3.nest()
         .key(d => d.year)
         .rollup(values => values.length)
@@ -309,6 +355,61 @@ function createLinePlotGross(data) {
         .attr("y", 0 - (margin.top / 2))
         .attr("text-anchor", "middle")
         .style("font-size", "16px");
+}
+
+function createScatterPlotGrossRating(data) {
+    // Filter the data to include only data points from the year 2000 and valid "gross" values
+    const filteredData = data.filter(d =>!isNaN(+d.gross) && +d.gross > 1);
+
+    // Find the maximum "gross" value in the filtered data
+    const maxGross = d3.max(filteredData, d => +d.gross);
+
+    d3.select(".scatterPlot").html("");
+
+    const margin = { top: 20, right: 20, bottom: 40, left: 40 };
+    const width = 600 - margin.left - margin.right;
+    const height = 400 - margin.top - margin.bottom;
+
+    const svg = d3.select(".scatterPlot")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+    const xScale = d3.scaleLinear()
+        .domain([0, maxGross]) // Set the x-axis domain to the maximum "gross" value
+        .range([0, width]);
+
+    const yScale = d3.scaleLinear()
+        .domain([0, d3.max(filteredData, d => d.rating)])
+        .range([height, 0]);
+
+    svg.selectAll("circle")
+        .data(filteredData)
+        .enter()
+        .append("circle")
+        .attr("cx", d => xScale(d.gross))
+        .attr("cy", d => yScale(d.rating))
+        .attr("r", 5);
+
+    svg.append("g")
+        .attr("transform", `translate(0, ${height})`)
+        .call(d3.axisBottom(xScale));
+
+    svg.append("g")
+        .call(d3.axisLeft(yScale));
+
+    svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", height + 35)
+        .text("Gross");
+
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -height / 2)
+        .attr("y", -30)
+        .text("Rating");
 }
 
 
