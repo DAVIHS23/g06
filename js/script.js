@@ -91,6 +91,7 @@ function createGrossIncomeTreeMap(filteredData) {
         .range(["#e5f6ff", "#003a6d"]);
 
     const treemapData = treemap(root);
+    const clickedElements = [];
 
     svg.selectAll("rect")
         .data(treemapData.leaves())
@@ -101,7 +102,18 @@ function createGrossIncomeTreeMap(filteredData) {
         .attr("width", d => d.x1 - d.x0)
         .attr("height", d => d.y1 - d.y0)
         .style("stroke", "#e5f6ff")
-        .style("fill", d => colorScale(d.data.gross));;
+        .style("fill", d => colorScale(d.data.gross))
+        .on("click", function (d) {
+            const isClicked = clickedElements.includes(d.data);
+            if (isClicked) {
+                console.log("Element already clicked:", d.data);
+            } else {
+                clickedElements.push(d.data);
+                console.log("Clicked on an element:", d.data);
+            }
+        });
+
+
 
     svg.selectAll("text")
         .data(treemapData.leaves())
@@ -109,7 +121,7 @@ function createGrossIncomeTreeMap(filteredData) {
         .append("text")
         .attr("x", d => (d.x0 + d.x1) / 2)
         .attr("y", d => (d.y0 + d.y1) / 2)
-        .text(d => `${d.data.title} (${d.data.gross}M USD)`) 
+        .text(d => `${d.data.title} (${d.data.gross}M USD)`)
         .call(wrap, 100)
         .attr("dy", "0.35em")
         .style("text-anchor", "middle")
