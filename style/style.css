@@ -28,3 +28,29 @@ svg {
     height:100%;
     background:rgba(0,0,0,0.2);
 }
+
+.horizontalGrid {
+    stroke: #ddd; /* Color of horizontal grid lines */
+}
+
+.verticalGrid {
+    stroke: #ddd; /* Color of vertical grid lines */
+}
+
+/* Assuming 'ratingSlider' is the ID of your slider element */
+#ratingSlider {
+    /* Set the background color of the slider track */
+    background-color:white; /* Change to your desired color */
+
+    /* Set the color of the slider handle (thumb) */
+    .noUi-handle {
+        background-color: #012749; /* Change to your desired color */
+    }
+
+    .noUi-connect {
+        background-color: #; /* Change to your desired color */
+    }
+
+
+}
+

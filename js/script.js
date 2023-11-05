@@ -12,7 +12,7 @@ d3.csv("data/movies-originalDataset.csv", function (data) {
     connectGenreSelectionToLinePlot(data);
     connectYearSelectionToScatterPlot(data);
     createScatterPlotGrossRating(data);
-    // setupHoverEvent(data);
+
 
 
 })
@@ -54,9 +54,10 @@ function createGrossIncomeTreeMap(filteredData) {
 
     const colorScale = d3.scaleLinear()
         .domain([0, d3.max(filteredData, d => d.gross)])
-        .range(["#c0d6e4", "#195e17"]);
+        .range(["#bae6ff", "#00539a"]);
 
     const treemapData = treemap(root);
+    
 
     svg.selectAll("rect")
         .data(treemapData.leaves())
@@ -66,7 +67,7 @@ function createGrossIncomeTreeMap(filteredData) {
         .attr("y", d => d.y0)
         .attr("width", d => d.x1 - d.x0)
         .attr("height", d => d.y1 - d.y0)
-        .style("stroke", "black")
+        .style("stroke", "#012749")
         .style("fill", d => colorScale(d.data.gross));;
 
     svg.selectAll("text")
@@ -270,7 +271,7 @@ function createLinePlot(data) {
         .datum(yearsData)
         .attr("class", "line")
         .attr("d", line)
-        .attr("stroke", "green")
+        .attr("stroke", "#00539a")
         .attr("fill", "none");
 
     svg.append("g")
@@ -300,7 +301,29 @@ function createLinePlot(data) {
         .attr("y", 0 - (margin.top / 2))
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
-    //.text(`Number of Data Points for Genre: ${selectedGenre}`);
+
+    // Append horizontal grid lines
+    svg.selectAll("horizontalGrid")
+        .data(y.ticks(5))
+        .enter()
+        .append("line")
+        .attr("class", "horizontalGrid")
+        .attr("x1", 0)
+        .attr("x2", width)
+        .attr("y1", d => y(d))
+        .attr("y2", d => y(d));
+
+    // Append vertical grid lines
+    svg.selectAll("verticalGrid")
+        .data(x.ticks(5))
+        .enter()
+        .append("line")
+        .attr("class", "verticalGrid")
+        .attr("x1", d => x(d))
+        .attr("x2", d => x(d))
+        .attr("y1", 0)
+        .attr("y2", height);
+
 }
 
 function createLinePlotGross(data) {
@@ -310,6 +333,8 @@ function createLinePlotGross(data) {
         .key(d => d.year)
         .rollup(values => d3.mean(values, d => d.gross))
         .entries(data);
+
+
 
     console.log(yearsData);
 
@@ -342,7 +367,7 @@ function createLinePlotGross(data) {
         .datum(yearsData)
         .attr("class", "line")
         .attr("d", line)
-        .attr("stroke", "green")
+        .attr("stroke", "#00539a")
         .attr("fill", "none");
 
     svg.append("g")
@@ -372,6 +397,28 @@ function createLinePlotGross(data) {
         .attr("y", 0 - (margin.top / 2))
         .attr("text-anchor", "middle")
         .style("font-size", "16px");
+
+    svg.selectAll("horizontalGrid")
+        .data(y.ticks(5))
+        .enter()
+        .append("line")
+        .attr("class", "horizontalGrid")
+        .attr("x1", 0)
+        .attr("x2", width)
+        .attr("y1", d => y(d))
+        .attr("y2", d => y(d));
+
+    // Append vertical grid lines
+    svg.selectAll("verticalGrid")
+        .data(x.ticks(5))
+        .enter()
+        .append("line")
+        .attr("class", "verticalGrid")
+        .attr("x1", d => x(d))
+        .attr("x2", d => x(d))
+        .attr("y1", 0)
+        .attr("y2", height);
+
 }
 
 
@@ -392,6 +439,9 @@ function calculateLinearRegression(data) {
 
     return { slope, intercept };
 }
+
+
+
 
 function createScatterPlotGrossRating(data) {
     const filteredData = data.filter(d => !isNaN(+d.gross) && +d.gross > 1);
@@ -443,8 +493,9 @@ function createScatterPlotGrossRating(data) {
         .attr("cx", d => xScale(d.gross))
         .attr("cy", d => yScale(d.rating))
         .attr("r", 5.5)
-        .style("fill", "#69b3a2")
+        .style("fill", "#33b1ff")
         .style("opacity", 0.8)
+
 
         .on("mouseover", function (event, index) {
             const d = filteredData[index];
@@ -461,8 +512,8 @@ function createScatterPlotGrossRating(data) {
 
             //Lessons Learned: With overlapping points the tooltip calculation based on coordinates does not work
             console.log(containerX, containerY)
-            const x = (containerX + (scatterPlotRight*0.9))
-            const y = (containerY + (scatterPlotHeight*0.05))
+            const x = (containerX + (scatterPlotRight * 0.9))
+            const y = (containerY + (scatterPlotHeight * 0.05))
             console.log(x, y)
 
             tooltip.html(`Title: ${d.title}<br>Gross: ${d.gross}<br>Rating: ${d.rating}`)
@@ -494,13 +545,40 @@ function createScatterPlotGrossRating(data) {
         .attr("y", -30)
         .text("Rating");
 
+
     const trendline = svg.append("line")
         .attr("x1", xScale(0))
         .attr("y1", yScale(trendlineData.intercept))
         .attr("x2", xScale(maxGross))
         .attr("y2", yScale(maxGross * trendlineData.slope + trendlineData.intercept))
-        .attr("stroke", "red")
+        .attr("stroke", "#00539a")
         .attr("stroke-width", 2);
+
+    // Append horizontal grid lines
+    svg.selectAll(".horizontalGrid")
+        .data(yScale.ticks(5))
+        .enter()
+        .append("line")
+        .attr("class", "horizontalGrid")
+        .attr("x1", 0)
+        .attr("x2", width)
+        .attr("y1", d => yScale(d))
+        .attr("y2", d => yScale(d));
+
+    // Append vertical grid lines
+    svg.selectAll(".verticalGrid")
+        .data(xScale.ticks(5))
+        .enter()
+        .append("line")
+        .attr("class", "verticalGrid")
+        .attr("x1", d => xScale(d))
+        .attr("x2", d => xScale(d))
+        .attr("y1", 0)
+        .attr("y2", height);
+
+
+
+
 }
 
 
