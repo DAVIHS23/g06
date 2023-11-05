@@ -29,28 +29,42 @@ svg {
     background:rgba(0,0,0,0.2);
 }
 
+.col-lg-6 {
+    
+    width: 80%; 
+}
+
+.incomeTreeMap {
+    width: 100%;
+ 
+}
+
+
+
 .horizontalGrid {
-    stroke: #ddd; /* Color of horizontal grid lines */
+    stroke: #ddd; 
 }
 
 .verticalGrid {
-    stroke: #ddd; /* Color of vertical grid lines */
+    stroke: #ddd; 
 }
 
-/* Assuming 'ratingSlider' is the ID of your slider element */
-#ratingSlider {
-    /* Set the background color of the slider track */
-    background-color:white; /* Change to your desired color */
 
-    /* Set the color of the slider handle (thumb) */
+#ratingSlider {
+  
+    background-color:white; 
+
+  
     .noUi-handle {
-        background-color: #012749; /* Change to your desired color */
+        background-color: #012749; 
     }
 
     .noUi-connect {
-        background-color: #; /* Change to your desired color */
+        background-color: #e5f6ff; 
     }
 
-
 }
+
+
+
 

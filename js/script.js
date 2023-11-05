@@ -28,6 +28,39 @@ function createGenreSelectionIncomeTreeMap(data) {
     createGrossIncomeTreeMap(data);
 }
 
+function wrap(text, width) {
+    text.each(function () {
+        var text = d3.select(this),
+            words = text.text().split(/\s+/).reverse(),
+            word,
+            line = [],
+            lineNumber = 0,
+            lineHeight = 1.1, // ems
+            x = text.attr("x"),
+            y = text.attr("y"),
+            dy = 0, //parseFloat(text.attr("dy")),
+            tspan = text.text(null)
+                .append("tspan")
+                .attr("x", x)
+                .attr("y", y)
+                .attr("dy", dy + "em");
+        while (word = words.pop()) {
+            line.push(word);
+            tspan.text(line.join(" "));
+            if (tspan.node().getComputedTextLength() > width) {
+                line.pop();
+                tspan.text(line.join(" "));
+                line = [word];
+                tspan = text.append("tspan")
+                    .attr("x", x)
+                    .attr("y", y)
+                    .attr("dy", ++lineNumber * lineHeight + dy + "em")
+                    .text(word);
+            }
+        }
+    });
+}
+
 function createGrossIncomeTreeMap(filteredData) {
     d3.select(".incomeTreeMap").html("");
     console.log("tree map sorted after income");
@@ -43,9 +76,10 @@ function createGrossIncomeTreeMap(filteredData) {
 
     const svg = d3.select(".incomeTreeMap")
         .append("svg")
-        .attr("width", treeMapWidth)
-        .attr("height", treeMapHeight);
-
+        .attr("viewBox", `0 0 ${treeMapWidth} ${treeMapHeight}`)
+        .attr("preserveAspectRatio", "xMidYMid meet")
+        .style("max-width", "100%")
+        .style("height", "auto");
     const root = d3.hierarchy({ children: filteredData })
         .sum(d => d.gross);
 
@@ -54,10 +88,9 @@ function createGrossIncomeTreeMap(filteredData) {
 
     const colorScale = d3.scaleLinear()
         .domain([0, d3.max(filteredData, d => d.gross)])
-        .range(["#bae6ff", "#00539a"]);
+        .range(["#e5f6ff", "#003a6d"]);
 
     const treemapData = treemap(root);
-    
 
     svg.selectAll("rect")
         .data(treemapData.leaves())
@@ -67,7 +100,7 @@ function createGrossIncomeTreeMap(filteredData) {
         .attr("y", d => d.y0)
         .attr("width", d => d.x1 - d.x0)
         .attr("height", d => d.y1 - d.y0)
-        .style("stroke", "#012749")
+        .style("stroke", "#e5f6ff")
         .style("fill", d => colorScale(d.data.gross));;
 
     svg.selectAll("text")
@@ -76,12 +109,15 @@ function createGrossIncomeTreeMap(filteredData) {
         .append("text")
         .attr("x", d => (d.x0 + d.x1) / 2)
         .attr("y", d => (d.y0 + d.y1) / 2)
-        .text(d => `${d.data.title} (${d.data.gross}M USD)`)
+        .text(d => `${d.data.title} (${d.data.gross}M USD)`) 
+        .call(wrap, 100)
         .attr("dy", "0.35em")
         .style("text-anchor", "middle")
         .style("font-size", "10px")
         .style("fill", "white");
+
 }
+
 
 function fillGenreSelections(data) {
     var genres = ["all"]
