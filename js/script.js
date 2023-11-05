@@ -421,14 +421,14 @@ function createScatterPlotGrossRating(data) {
     //const maxYRating = d3.max(filteredData, d => d.rating);
 
     const yDomainLowerLimit = Math.max(minYRating - 0.5, 0);
-   // const yDomainUpperLimit = Math.min(maxYRating + 0.5, 10);
+    // const yDomainUpperLimit = Math.min(maxYRating + 0.5, 10);
 
     const yScale = d3.scaleLinear()
         .domain([yDomainLowerLimit, 10])
         .range([height, 0]);
 
 
-    const tooltip = d3.select("body")
+    const tooltip = d3.select(".scatterPlot")
         .append("div")
         .style("position", "absolute")
         .style("background", "white")
@@ -440,32 +440,42 @@ function createScatterPlotGrossRating(data) {
         .data(filteredData)
         .enter()
         .append("circle")
-            .attr("cx", d => xScale(d.gross))
-            .attr("cy", d => yScale(d.rating))
-            .attr("r", 5)
-            .attr("fill", "black")
-            .style("fill", "#69b3a2")
-            .style("opacity", 0.9)
+        .attr("cx", d => xScale(d.gross))
+        .attr("cy", d => yScale(d.rating))
+        .attr("r", 5.5)
+        .style("fill", "#69b3a2")
+        .style("opacity", 0.8)
 
-        .on("mouseover", (event, index) => {
+        .on("mouseover", function (event, index) {
             const d = filteredData[index];
-            if (d) {
-                tooltip.transition()
-                    .duration(200)
-                    .style("opacity", 0.8);
-                tooltip.html(`Title: ${d.title}<br>Gross: ${d.gross}<br>Rating: ${d.rating}`)
-                    .style("top", d3.select(this).attr("cy") + "px")
-                    .style("left", d3.select(this).attr("cx") + "px")
-                  
-            }
+            const d3Tooltip = tooltip.node();
+            const scatterPlotContainer = d3.select(".scatterPlot").node();
+            const containerBounds = scatterPlotContainer.getBoundingClientRect();
+            const containerX = scatterPlotContainer.offsetLeft;
+            const containerY = scatterPlotContainer.offsetTop;
+            const scatterPlotRight = scatterPlotContainer.getBoundingClientRect().right;
+            const scatterPlotHeight = scatterPlotContainer.getBoundingClientRect().height;
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", 0.8);
+
+            //Lessons Learned: With overlapping points the tooltip calculation based on coordinates does not work
+            console.log(containerX, containerY)
+            const x = (containerX + (scatterPlotRight*0.9))
+            const y = (containerY + (scatterPlotHeight*0.05))
+            console.log(x, y)
+
+            tooltip.html(`Title: ${d.title}<br>Gross: ${d.gross}<br>Rating: ${d.rating}`)
+                .style("left", (x) + "px")
+                .style("top", (y) + "px");
         })
+
         .on("mouseout", () => {
             tooltip.transition()
-                .duration(500)
+                .duration(0)
                 .style("opacity", 0);
-        })
-   
-    
+        });
+
     svg.append("g")
         .attr("transform", `translate(0, ${height})`)
         .call(d3.axisBottom(xScale));
