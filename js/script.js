@@ -107,9 +107,12 @@ function createGrossIncomeTreeMap(filteredData) {
             const isClicked = clickedElements.includes(d.data);
             if (isClicked) {
                 console.log("Element already clicked:", d.data);
+                transformElement(this, true, d.data);
+
             } else {
                 clickedElements.push(d.data);
                 console.log("Clicked on an element:", d.data);
+                transformElement(this, false, d.data);
             }
         });
 
@@ -129,6 +132,45 @@ function createGrossIncomeTreeMap(filteredData) {
         .style("fill", "white");
 
 }
+
+function transformElement(element, isClicked, data) {
+    const fetchData = (movieTitle) => {
+        const apiKey = 'dd5aa8d86c1d4b5fce9ef36da52df818'; 
+        fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(movieTitle)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.results.length > 0) {
+                    const movieId = data.results[0].id; /
+               
+                    return fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}`);
+                } else {
+                    throw new Error('Movie not found');
+                }
+            })
+            .then(response => response.json())
+            .then(movieDetails => {
+                console.log('Fetched Movie Details:', movieDetails);
+                const posterPath = movieDetails.poster_path;
+                const posterUrl = `https://image.tmdb.org/t/p/w500${posterPath}`;
+                console.log('Poster URL:', posterUrl);
+                const imageElement = document.createElement('img');
+                imageElement.src = posterUrl;
+                imageElement.alt = movieTitle;
+                document.body.appendChild(imageElement); ge
+            })
+            .catch(error => console.error('Error:', error));
+    };
+
+    if (isClicked) {
+        // Code for when the element has already been clicked
+    } else {
+        // Extract movie title from the clicked element's bound data
+        const movieTitle = data.title;
+        console.log(movieTitle)
+        fetchData(movieTitle);
+    }
+}
+
 
 
 function fillGenreSelections(data) {
