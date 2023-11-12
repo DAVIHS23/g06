@@ -140,7 +140,7 @@ function transformElement(element, isClicked, data) {
             .then(response => response.json())
             .then(data => {
                 if (data.results.length > 0) {
-                    const movieId = data.results[0].id; /
+                    const movieId = data.results[0].id; 
                
                     return fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}`);
                 } else {
