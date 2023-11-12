@@ -156,7 +156,7 @@ function transformElement(element, isClicked, data) {
                 const imageElement = document.createElement('img');
                 imageElement.src = posterUrl;
                 imageElement.alt = movieTitle;
-                document.body.appendChild(imageElement); ge
+                document.body.appendChild(imageElement); 
             })
             .catch(error => console.error('Error:', error));
     };
