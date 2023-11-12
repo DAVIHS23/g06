@@ -2,10 +2,14 @@
 //var myCarousel = new bootstrap.Carousel(document.querySelector('#topCarousel'));
 
 // d3 js
+
+
 d3.csv("data/movies-originalDataset.csv", function (data) {
     console.log("data loaded")
+
     fillGenreSelections(data);
     fillYearSelections(data);
+    
 
     createGenreSelectionIncomeTreeMap(data);
 
@@ -61,7 +65,13 @@ function wrap(text, width) {
     });
 }
 
+
+
+let clickedElements = [];
+
 function createGrossIncomeTreeMap(filteredData) {
+    clickedElements = []
+
     d3.select(".incomeTreeMap").html("");
     console.log("tree map sorted after income");
     const treeMapWidth = 600;
@@ -91,7 +101,7 @@ function createGrossIncomeTreeMap(filteredData) {
         .range(["#e5f6ff", "#003a6d"]);
 
     const treemapData = treemap(root);
-    const clickedElements = [];
+    
 
     svg.selectAll("rect")
         .data(treemapData.leaves())
@@ -104,16 +114,8 @@ function createGrossIncomeTreeMap(filteredData) {
         .style("stroke", "#e5f6ff")
         .style("fill", d => colorScale(d.data.gross))
         .on("click", function (d) {
-            const isClicked = clickedElements.includes(d.data);
-            if (isClicked) {
-                console.log("Element already clicked:", d.data);
-                transformElement(this, true, d.data);
-
-            } else {
-                clickedElements.push(d.data);
-                console.log("Clicked on an element:", d.data);
-                transformElement(this, false, d.data);
-            }
+            // Toggle the transformation on each click
+            transformElement(this, d.data);
         });
 
 
@@ -133,15 +135,37 @@ function createGrossIncomeTreeMap(filteredData) {
 
 }
 
-function transformElement(element, isClicked, data) {
+
+
+function transformElement(element,data) {
+    const displayPosterInElement = (element, posterUrl) => {
+        const bounds = element.getBBox();
+
+        d3.select(element.parentNode)
+            .append('image')
+            .attr('xlink:href', posterUrl)
+            .attr('x', bounds.x)
+            .attr('y', bounds.y)
+            .attr('width', bounds.width)
+            .attr('height', bounds.height)
+            .attr('class', 'movie-poster'); // Add a class for easy selection later
+    };
+
+    const removePosterFromElement = (element) => {
+        d3.select(element.parentNode).select('.movie-poster').remove();
+        clickedElements = clickedElements.filter(el => el !== element);
+
+    };
+
+
     const fetchData = (movieTitle) => {
-        const apiKey = 'dd5aa8d86c1d4b5fce9ef36da52df818'; 
+        const apiKey = 'dd5aa8d86c1d4b5fce9ef36da52df818';
         fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(movieTitle)}`)
             .then(response => response.json())
             .then(data => {
                 if (data.results.length > 0) {
-                    const movieId = data.results[0].id; 
-               
+                    const movieId = data.results[0].id;
+
                     return fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}`);
                 } else {
                     throw new Error('Movie not found');
@@ -156,19 +180,38 @@ function transformElement(element, isClicked, data) {
                 const imageElement = document.createElement('img');
                 imageElement.src = posterUrl;
                 imageElement.alt = movieTitle;
-                document.body.appendChild(imageElement); 
+                document.body.appendChild(imageElement);
+                displayPosterInElement(element, posterUrl);
             })
             .catch(error => console.error('Error:', error));
     };
 
-    if (isClicked) {
-        // Code for when the element has already been clicked
-    } else {
-        // Extract movie title from the clicked element's bound data
+    const elementIndex = clickedElements.indexOf(element);
+    console.log(clickedElements)
+    if (elementIndex === -1) {
+        clickedElements.push(element);
         const movieTitle = data.title;
-        console.log(movieTitle)
         fetchData(movieTitle);
+        setTimeout(() => removePosterFromElement(element), 2000);
+    } else {
+       
     }
+    
+
+
+}
+
+
+function displayPosterInElement(element, posterUrl) {
+    const bounds = element.getBBox();
+
+    d3.select(element.parentNode)
+        .append('image')
+        .attr('xlink:href', posterUrl)
+        .attr('x', bounds.x)
+        .attr('y', bounds.y)
+        .attr('width', bounds.width)
+        .attr('height', bounds.height);
 }
 
 
