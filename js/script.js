@@ -188,7 +188,16 @@ function transformElement(element, data) {
     const fetchData = (movieTitle) => {
 
         if (movieDataCache[movieTitle]) {
+            console.log('Using cached data from memory for:', movieTitle);
             useMovieData(movieDataCache[movieTitle]);
+            return;
+        }
+
+        const cachedMovieData = JSON.parse(localStorage.getItem('movieData'));
+        if (cachedMovieData && cachedMovieData[movieTitle]) {
+            console.log('Using cached data from localStorage for:', movieTitle);
+            movieDataCache = cachedMovieData; // Update the in-memory cache
+            useMovieData(cachedMovieData[movieTitle], element);
             return;
         }
         
@@ -215,6 +224,7 @@ function transformElement(element, data) {
                 const image = new Image();
                 image.src = posterUrl;
                 movieDataCache[movieTitle] = movieDetails;
+                localStorage.setItem('movieData', JSON.stringify(movieDataCache));
 
                 image.onload = () => {
                     const posterWidth = image.naturalWidth;
@@ -230,6 +240,7 @@ function transformElement(element, data) {
 
     const useMovieData = (movieTitle) => { //from here i have duplicate code but its ok for the moment 
         console.log('Using cached data for:', movieTitle);
+        
         const posterPath = movieTitle.poster_path;
         const posterUrl = `https://image.tmdb.org/t/p/w500${posterPath}`;
         const image = new Image();
