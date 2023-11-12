@@ -145,18 +145,18 @@ function transformElement(element, data) {
 
         const scale = Math.max(scaleX, scaleY);
 
-       
+
         const scaledWidth = posterWidth * scale;
         const scaledHeight = posterHeight * scale;
 
-        
+
         const x = bounds.x + (bounds.width - scaledWidth) / 2;
         const y = bounds.y + (bounds.height - scaledHeight) / 2;
 
-    
+
         const clipPathId = 'clip-' + Math.random().toString(36).slice(2, 11);
 
-       
+
         d3.select(element.parentNode)
             .append('clipPath')
             .attr('id', clipPathId)
@@ -173,7 +173,7 @@ function transformElement(element, data) {
             .attr('y', y)
             .attr('width', scaledWidth)
             .attr('height', scaledHeight)
-            .attr('clip-path', `url(#${clipPathId})`) 
+            .attr('clip-path', `url(#${clipPathId})`)
             .attr('class', 'movie-poster');
     };
 
@@ -183,7 +183,7 @@ function transformElement(element, data) {
 
     };
 
-    
+
 
     const fetchData = (movieTitle) => {
 
@@ -200,7 +200,7 @@ function transformElement(element, data) {
             useMovieData(cachedMovieData[movieTitle], element);
             return;
         }
-        
+
         const apiKey = 'dd5aa8d86c1d4b5fce9ef36da52df818';
         fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(movieTitle)}`)
             .then(response => response.json())
@@ -215,11 +215,11 @@ function transformElement(element, data) {
             })
             .then(response => response.json())
             .then(movieDetails => {
-                
+
                 console.log('Fetched Movie Details:', movieDetails);
                 const posterPath = movieDetails.poster_path;
                 const posterUrl = `https://image.tmdb.org/t/p/w500${posterPath}`;
-                
+
 
                 const image = new Image();
                 image.src = posterUrl;
@@ -240,7 +240,7 @@ function transformElement(element, data) {
 
     const useMovieData = (movieTitle) => { //from here i have duplicate code but its ok for the moment 
         console.log('Using cached data for:', movieTitle);
-        
+
         const posterPath = movieTitle.poster_path;
         const posterUrl = `https://image.tmdb.org/t/p/w500${posterPath}`;
         const image = new Image();
@@ -251,7 +251,7 @@ function transformElement(element, data) {
             displayPosterInElement(element, posterUrl, posterWidth, posterHeight);
             setTimeout(() => removePosterFromElement(element), 3000);
         };
-        
+
 
     }
 
@@ -634,9 +634,23 @@ function calculateLinearRegression(data) {
 
 
 function createScatterPlotGrossRating(data) {
+
+
+
+
     const filteredData = data.filter(d => !isNaN(+d.gross) && +d.gross > 1);
 
+
     const maxGross = d3.max(filteredData, d => +d.gross);
+
+    data.forEach(d => {
+        if (+d['Cluster 1'] === 1) d.clusterLabel = 1;
+        else if (+d['Cluster 2'] === 1) d.clusterLabel = 2;
+        else if (+d['Cluster 3'] === 1) d.clusterLabel = 3;
+        else if (+d['Cluster 4'] === 1) d.clusterLabel = 4;
+        else d.clusterLabel = null; // In case none of the clusters are marked
+    });
+
 
     const trendlineData = calculateLinearRegression(filteredData);
 
@@ -676,6 +690,10 @@ function createScatterPlotGrossRating(data) {
         .style("padding", "5px")
         .style("opacity", 0);
 
+    const colorScale = d3.scaleOrdinal()
+        .domain([1, 2, 3, 4])
+        .range(["#0f62fe", "#8a3ffc", "0072c", "#198038"]);
+
     svg.selectAll("circle")
         .data(filteredData)
         .enter()
@@ -683,7 +701,8 @@ function createScatterPlotGrossRating(data) {
         .attr("cx", d => xScale(d.gross))
         .attr("cy", d => yScale(d.rating))
         .attr("r", 5.5)
-        .style("fill", "#33b1ff")
+        //.style("fill", "#33b1ff")
+        .style("fill", d => colorScale(d.clusterLabel))
         .style("opacity", 0.8)
 
 
@@ -744,7 +763,6 @@ function createScatterPlotGrossRating(data) {
         .attr("stroke", "#00539a")
         .attr("stroke-width", 2);
 
-    // Append horizontal grid lines
     svg.selectAll(".horizontalGrid")
         .data(yScale.ticks(5))
         .enter()
@@ -755,7 +773,6 @@ function createScatterPlotGrossRating(data) {
         .attr("y1", d => yScale(d))
         .attr("y2", d => yScale(d));
 
-    // Append vertical grid lines
     svg.selectAll(".verticalGrid")
         .data(xScale.ticks(5))
         .enter()
