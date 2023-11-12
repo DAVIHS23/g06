@@ -9,7 +9,7 @@ d3.csv("data/movies-originalDataset.csv", function (data) {
 
     fillGenreSelections(data);
     fillYearSelections(data);
-    
+
 
     createGenreSelectionIncomeTreeMap(data);
 
@@ -101,7 +101,7 @@ function createGrossIncomeTreeMap(filteredData) {
         .range(["#e5f6ff", "#003a6d"]);
 
     const treemapData = treemap(root);
-    
+
 
     svg.selectAll("rect")
         .data(treemapData.leaves())
@@ -114,7 +114,6 @@ function createGrossIncomeTreeMap(filteredData) {
         .style("stroke", "#e5f6ff")
         .style("fill", d => colorScale(d.data.gross))
         .on("click", function (d) {
-            // Toggle the transformation on each click
             transformElement(this, d.data);
         });
 
@@ -135,20 +134,47 @@ function createGrossIncomeTreeMap(filteredData) {
 
 }
 
+let movieDataCache = {};
 
-
-function transformElement(element,data) {
-    const displayPosterInElement = (element, posterUrl) => {
+function transformElement(element, data) {
+    const displayPosterInElement = (element, posterUrl, posterWidth, posterHeight) => {
         const bounds = element.getBBox();
+
+        const scaleX = (bounds.width) / posterWidth;
+        const scaleY = (bounds.height) / posterHeight;
+
+        const scale = Math.max(scaleX, scaleY);
+
+       
+        const scaledWidth = posterWidth * scale;
+        const scaledHeight = posterHeight * scale;
+
+        
+        const x = bounds.x + (bounds.width - scaledWidth) / 2;
+        const y = bounds.y + (bounds.height - scaledHeight) / 2;
+
+    
+        const clipPathId = 'clip-' + Math.random().toString(36).slice(2, 11);
+
+       
+        d3.select(element.parentNode)
+            .append('clipPath')
+            .attr('id', clipPathId)
+            .append('rect')
+            .attr('x', bounds.x)
+            .attr('y', bounds.y)
+            .attr('width', bounds.width)
+            .attr('height', bounds.height);
 
         d3.select(element.parentNode)
             .append('image')
             .attr('xlink:href', posterUrl)
-            .attr('x', bounds.x)
-            .attr('y', bounds.y)
-            .attr('width', bounds.width)
-            .attr('height', bounds.height)
-            .attr('class', 'movie-poster'); // Add a class for easy selection later
+            .attr('x', x)
+            .attr('y', y)
+            .attr('width', scaledWidth)
+            .attr('height', scaledHeight)
+            .attr('clip-path', `url(#${clipPathId})`) 
+            .attr('class', 'movie-poster');
     };
 
     const removePosterFromElement = (element) => {
@@ -157,8 +183,15 @@ function transformElement(element,data) {
 
     };
 
+    
 
     const fetchData = (movieTitle) => {
+
+        if (movieDataCache[movieTitle]) {
+            useMovieData(movieDataCache[movieTitle]);
+            return;
+        }
+        
         const apiKey = 'dd5aa8d86c1d4b5fce9ef36da52df818';
         fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(movieTitle)}`)
             .then(response => response.json())
@@ -173,18 +206,43 @@ function transformElement(element,data) {
             })
             .then(response => response.json())
             .then(movieDetails => {
+                
                 console.log('Fetched Movie Details:', movieDetails);
                 const posterPath = movieDetails.poster_path;
                 const posterUrl = `https://image.tmdb.org/t/p/w500${posterPath}`;
-                console.log('Poster URL:', posterUrl);
-                const imageElement = document.createElement('img');
-                imageElement.src = posterUrl;
-                imageElement.alt = movieTitle;
-                document.body.appendChild(imageElement);
-                displayPosterInElement(element, posterUrl);
+                
+
+                const image = new Image();
+                image.src = posterUrl;
+                movieDataCache[movieTitle] = movieDetails;
+
+                image.onload = () => {
+                    const posterWidth = image.naturalWidth;
+                    const posterHeight = image.naturalHeight;
+
+                    displayPosterInElement(element, posterUrl, posterWidth, posterHeight);
+
+                    setTimeout(() => removePosterFromElement(element), 3000);
+                };
             })
             .catch(error => console.error('Error:', error));
     };
+
+    const useMovieData = (movieTitle) => { //from here i have duplicate code but its ok for the moment 
+        console.log('Using cached data for:', movieTitle);
+        const posterPath = movieTitle.poster_path;
+        const posterUrl = `https://image.tmdb.org/t/p/w500${posterPath}`;
+        const image = new Image();
+        image.src = posterUrl;
+        image.onload = () => {
+            const posterWidth = image.naturalWidth;
+            const posterHeight = image.naturalHeight;
+            displayPosterInElement(element, posterUrl, posterWidth, posterHeight);
+            setTimeout(() => removePosterFromElement(element), 3000);
+        };
+        
+
+    }
 
     const elementIndex = clickedElements.indexOf(element);
     console.log(clickedElements)
@@ -192,27 +250,15 @@ function transformElement(element,data) {
         clickedElements.push(element);
         const movieTitle = data.title;
         fetchData(movieTitle);
-        setTimeout(() => removePosterFromElement(element), 2000);
+        setTimeout(() => removePosterFromElement(element), 3000);
     } else {
-       
+
     }
-    
+
 
 
 }
 
-
-function displayPosterInElement(element, posterUrl) {
-    const bounds = element.getBBox();
-
-    d3.select(element.parentNode)
-        .append('image')
-        .attr('xlink:href', posterUrl)
-        .attr('x', bounds.x)
-        .attr('y', bounds.y)
-        .attr('width', bounds.width)
-        .attr('height', bounds.height);
-}
 
 
 
