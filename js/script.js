@@ -333,7 +333,7 @@ function initializeSliders(data) {
     let displayminRating = d3.min(data, d => d.rating);
     let displaymaxRating = d3.max(data, d => d.rating);
     let initialSliderValues = [displayminRating, displaymaxRating];
-    minRatingDisplay.textContent = "Min: " + displayminRating;
+    minRatingDisplay.textContent = "Min in data: " + displayminRating;
     maxRatingDisplay.textContent = "Max: " + displaymaxRating;
     if (ratingSlider.noUiSlider) {
         ratingSlider.noUiSlider.destroy();
@@ -680,8 +680,8 @@ function createScatterPlotGrossRating(data, stardata) {
         .domain([yDomainLowerLimit, 10])
         .range([height, 0]);
 
-    // add brushing here 
-  
+    // add brushing here
+
 
     const tooltip = d3.select(".scatterPlot")
         .append("div")
@@ -728,24 +728,16 @@ function createScatterPlotGrossRating(data, stardata) {
             const y = (containerY + (scatterPlotHeight * 0.05))
             console.log(x, y)
 
-
             tooltip.html(`Title: ${d.title}<br>Gross: ${d.gross}<br>Rating: ${d.rating}`)
                 .style("left", (x) + "px")
                 .style("top", (y) + "px");
-
             const movieTitle = d.title; // Get the movie title from the hovered point
             const filteredStars = stardata.filter(star => {
-
                 const searchPattern = `'${movieTitle}'`;
                 return star.movies.includes(searchPattern);
             });
 
             filterAndDisplayStarsData(filteredStars);
-
-
-
-
-
         })
 
         .on("mouseout", () => {
@@ -771,7 +763,6 @@ function createScatterPlotGrossRating(data, stardata) {
         .attr("x", -height / 2)
         .attr("y", -30)
         .text("Rating");
-
 
     const trendline = svg.append("line")
         .attr("x1", xScale(0))
@@ -800,15 +791,12 @@ function createScatterPlotGrossRating(data, stardata) {
         .attr("x2", d => xScale(d))
         .attr("y1", 0)
         .attr("y2", height);
-
-
 }
 
 function filterAndDisplayStarsData(data) {
     console.log(data)
     createAppearancesBarChart(data);
 }
-
 
 function createAppearancesBarChart(data) {
 
@@ -837,7 +825,6 @@ function createAppearancesBarChart(data) {
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
-
     var x = d3.scaleBand()
         .range([0, width])
         .domain(topStars.map(d => d.stars))
@@ -849,13 +836,11 @@ function createAppearancesBarChart(data) {
         .attr("transform", "translate(-10,0)rotate(-45)")
         .style("text-anchor", "end");
 
-
     var y = d3.scaleLinear()
         .domain([0, d3.max(topStars, d => d.appearances)])
         .range([height, 0]);
     svg.append("g")
         .call(d3.axisLeft(y));
-
 
     svg.selectAll("mybar")
         .data(topStars)
@@ -867,7 +852,6 @@ function createAppearancesBarChart(data) {
         .attr("height", d => height - y(d.appearances))
         .attr("fill", "#69b3a2");
 }
-
 
 function countGenreAppearances(data) {
     const combinationCounts = {};
@@ -887,7 +871,6 @@ function countGenreAppearances(data) {
     console.log(combinationCountsArray);
     createGenreCombinationBarChart(combinationCountsArray);
 }
-
 
 function createGenreCombinationBarChart(data) {
     // Remove any existing svg elements in the target container
@@ -941,27 +924,3 @@ function createGenreCombinationBarChart(data) {
         .attr("height", d => height - y(d.count))
         .attr("fill", "#69b3a2");
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

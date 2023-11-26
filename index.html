@@ -57,7 +57,7 @@
     <!-- TODO: add description per diagram? -->
     <div class="container">
         <div class="row">
-            <div class="col-12 col-md-8 col-lg-6 mx-auto">
+            <div class="col-12 col-lg-12 mx-auto">
                 <h2 class="text-center mt-3">Highest Grossing Movies</h2>
                 <div class="d-flex justify-content-between mt-3">
                     <label for="genreSelectionIncomeTreeMap">Genre:</label>
@@ -70,64 +70,71 @@
         </div>
     </div>
 
-    <div class="container mt-5">
-        <h2 class="text-center">Movie Ratings Range</h2>
-        <!-- add title and description for each (average income mention missing datapoints)-->
-        <div class="row mt-3">
-            <div class="col-md-8">
-                <div id="ratingSlider"></div>
-            </div>
-            <div class="col-md-4">
-                <div id="ratingRangeDisplay">
-                    <span id="minRatingDisplay">Min: 1</span>
+    <div class="container">
+        <div class="row">
+            <h2 class="text-center">Movie Ratings Range</h2>
+            <div class="row mt-3">
+                <div class="col-md-12 d-flex justify-content-between">
+                    <span id="minRatingDisplay">Min in data: 1</span>
+                    <div id="ratingSlider" class="flex-grow-1"></div>
                     <span id="maxRatingDisplay">Max: 10</span>
                 </div>
             </div>
-        </div>
-        <div class="row mt-3">
-            <div class="col-md-8 offset-md-2">
-                <p class="text-center">Selected Range: <span id="ratingRange">1 - 10</span></p>
+            <div class="row mt-3">
+                <div class="col-md-8 offset-md-2">
+                    <p class="text-center">Selected Range: <span id="ratingRange">1 - 10</span></p>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between mt-3">
+                <label for="genreSelectionNumberOfMovies">Genre:</label>
+                <select name="genreSelectionNumberOfMovies" id="genreSelectionNumberOfMovies" class="genreSelection">
+                    <option value="all">All Genres</option>
+                </select>
             </div>
         </div>
-        <div class="d-flex justify-content-between mt-3">
-            <label for="genreSelectionNumberOfMovies">Genre:</label>
-            <!-- TODO: remove all genre -->
-            <select name="genreSelectionNumberOfMovies" id="genreSelectionNumberOfMovies" class="genreSelection">
-                <option value="all">All Genres</option>
-            </select>
+    </div>
+    <div class="container">
+        <div class="row">
+            <!-- add title and description for each (average income mention missing datapoints)-->
+            <div class="col-md-12 col-lg-6">
+                <h3 class="text-center">Number of Movies</h3>
+                <div class="numberOfMovies"></div>
+            </div>
+            <div class="col-md-12 col-lg-6">
+                <h3 class="text-center">Income Per Year</h3>
+                <div class="incomePerYear"></div>
+            </div>
         </div>
-    </div>
-
-    <div class="col mt-3">
-        <div class="numberOfMovies d-inline-block">Number of Movies</div>
-    </div>
-    <div class="col  mt-3">
-        <div class="incomePerYear d-inline-block">Income Per Year</div>
-    </div>
-
-    <!-- <h2>Ratings and Income</h2> -->
-    <h2>Box office close vs. Ratings for movies</h2>
-    <!-- TODO: force user to select a year-->
-    <div>
-        <label for="yearSelection">Year:</label>
-        <select name="yearSelection" id="yearSelection" class="yearSelection">
-            <option value="all">All Movies</option>
-        </select>
-    </div>
-
-    <div class="col mt-3">
-        <div class="scatterPlot d-inline-block">Income Per Year</div>
     </div>
 
     <div class="container">
         <div class="row">
+            <!-- <h2>Ratings and Income</h2> -->
+            <h2 class="text-center">Box office close vs. Ratings for movies</h2>
+            <!-- TODO: force user to select a year-->
+            <div>
+                <label for="yearSelection">Year:</label>
+                <select name="yearSelection" id="yearSelection" class="yearSelection">
+                    <option value="all">All Movies</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <div class="scatterPlot">Income Per Year</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row text-center">
             <!-- Top Stars Appearances Chart -->
-            <div class="col-md-6">
+            <div class="col-md-12 col-lg-6">
                 <h2>Top Stars Appearances</h2>
                 <div class="barChart"></div>
             </div>
             <!-- Top Genre Combinations Chart -->
-            <div class="col-md-6">
+            <div class="col-md-12 col-lg-6">
                 <h2>Top Genre Combinations</h2>
                 <div class="barChartGenre"></div>
             </div>

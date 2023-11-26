@@ -16,7 +16,7 @@ svg {
     max-width: 100%;
     width:100% !important;
     display: block!important;
-    height: auto;
+    /* height: auto; */
 }
 .img_overlay {
     position:absolute;
@@ -29,43 +29,31 @@ svg {
     background:rgba(0,0,0,0.2);
 }
 
-.col-lg-6 {
-    
-    width: 80%; 
-}
-
 .incomeTreeMap {
     width: 100%;
- 
 }
 
-
-
 .horizontalGrid {
-    stroke: #ddd; 
+    stroke: #ddd;
 }
 
 .verticalGrid {
-    stroke: #ddd; 
+    stroke: #ddd;
 }
 
-
 #ratingSlider {
-  
-    background-color:white; 
-
-  
+    background-color:white;
     .noUi-handle {
-        background-color: #012749; 
+        background-color: #012749;
     }
 
     .noUi-connect {
-        background-color: #e5f6ff; 
+        background-color: #e5f6ff;
     }
-
 }
 
-
-
-
-
+.scatterPlot svg {
+    width: 650px!important;
+    max-width: 100%;
+    margin:auto;
+}
