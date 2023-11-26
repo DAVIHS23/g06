@@ -16,6 +16,6 @@ then do the following:
 4. Execute this command: `python3 -m http.server`
 5. Go to <http://0.0.0.0:8000/>
 
-## Caching prevenets styling update
+## Browser caching prevents updating CSS or JS
 
 Press [ctrl] + [shift] + [r] in your browser
