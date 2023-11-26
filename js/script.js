@@ -275,7 +275,9 @@ function transformElement(element, data) {
 }
 
 function fillGenreSelections(data) {
-    var genres = ["all"]
+    // unnecessary since it is added in HTML
+    //var genres = ["all"]
+    var genres = []
     data.forEach(d => {
         if (d.genre) {
             d.genre.split(",").forEach(g => {
@@ -300,7 +302,9 @@ function fillGenreSelections(data) {
 }
 
 function fillYearSelections(data) {
-    const years = ["all"];
+    // unnecessary since it is added in HTML
+    //const years = ["all"];
+    const years = [];
     data.forEach((d) => {
         if (d.year) {
             const year = d.year.toString();
