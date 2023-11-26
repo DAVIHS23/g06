@@ -2,14 +2,11 @@
 //var myCarousel = new bootstrap.Carousel(document.querySelector('#topCarousel'));
 
 // d3 js
-
-
 d3.csv("data/movies-originalDataset.csv", function (data) {
     console.log("data loaded")
 
     fillGenreSelections(data);
     fillYearSelections(data);
-
 
     createGenreSelectionIncomeTreeMap(data);
 
@@ -22,7 +19,6 @@ d3.csv("data/movies-originalDataset.csv", function (data) {
         createScatterPlotGrossRating(data, starsData);
         connectYearSelectionToScatterPlot(data, starsData);
     });
-
 })
 
 function createGenreSelectionIncomeTreeMap(data) {
@@ -69,8 +65,6 @@ function wrap(text, width) {
     });
 }
 
-
-
 let clickedElements = [];
 
 function createGrossIncomeTreeMap(filteredData) {
@@ -106,7 +100,6 @@ function createGrossIncomeTreeMap(filteredData) {
 
     const treemapData = treemap(root);
 
-
     svg.selectAll("rect")
         .data(treemapData.leaves())
         .enter()
@@ -121,8 +114,6 @@ function createGrossIncomeTreeMap(filteredData) {
             transformElement(this, d.data);
         });
 
-
-
     svg.selectAll("text")
         .data(treemapData.leaves())
         .enter()
@@ -135,7 +126,6 @@ function createGrossIncomeTreeMap(filteredData) {
         .style("text-anchor", "middle")
         .style("font-size", "10px")
         .style("fill", "white");
-
 }
 
 let movieDataCache = {};
@@ -149,17 +139,13 @@ function transformElement(element, data) {
 
         const scale = Math.max(scaleX, scaleY);
 
-
         const scaledWidth = posterWidth * scale;
         const scaledHeight = posterHeight * scale;
-
 
         const x = bounds.x + (bounds.width - scaledWidth) / 2;
         const y = bounds.y + (bounds.height - scaledHeight) / 2;
 
-
         const clipPathId = 'clip-' + Math.random().toString(36).slice(2, 11);
-
 
         d3.select(element.parentNode)
             .append('clipPath')
@@ -180,17 +166,12 @@ function transformElement(element, data) {
             .attr('clip-path', `url(#${clipPathId})`)
             .attr('class', 'movie-poster');
     };
-
     const removePosterFromElement = (element) => {
         d3.select(element.parentNode).select('.movie-poster').remove();
         clickedElements = clickedElements.filter(el => el !== element);
-
     };
 
-
-
     const fetchData = (movieTitle) => {
-
         if (movieDataCache[movieTitle]) {
             console.log('Using cached data from memory for:', movieTitle);
             useMovieData(movieDataCache[movieTitle]);
@@ -255,8 +236,6 @@ function transformElement(element, data) {
             displayPosterInElement(element, posterUrl, posterWidth, posterHeight);
             setTimeout(() => removePosterFromElement(element), 3000);
         };
-
-
     }
 
     const elementIndex = clickedElements.indexOf(element);
@@ -266,12 +245,7 @@ function transformElement(element, data) {
         const movieTitle = data.title;
         fetchData(movieTitle);
         setTimeout(() => removePosterFromElement(element), 3000);
-    } else {
-
     }
-
-
-
 }
 
 function fillGenreSelections(data) {
@@ -289,7 +263,6 @@ function fillGenreSelections(data) {
         }
     });
     genres.sort();
-
     const genreDropdowns = document.querySelectorAll('.genreSelection');
     genreDropdowns.forEach((dropdown) => {
         genres.forEach((genre) => {
@@ -326,8 +299,6 @@ function fillYearSelections(data) {
     });
 }
 
-
-
 function initializeSliders(data) {
     const ratingSlider = document.getElementById('ratingSlider');
     let displayminRating = d3.min(data, d => d.rating);
@@ -347,8 +318,6 @@ function initializeSliders(data) {
             max: 10
         }
     });
-
-
 
     const ratingRange = document.getElementById('ratingRange');
     ratingSlider.noUiSlider.on('update', function (values, handle) {
@@ -376,7 +345,6 @@ function connectGenreSelectionToLinePlot(data) {
     createLinePlot(data);
     createLinePlotGross(data);
     initializeSliders(data);
-
 }
 
 function connectYearSelectionToScatterPlot(data, stardata) {
@@ -390,11 +358,8 @@ function connectYearSelectionToScatterPlot(data, stardata) {
         console.log("filtered data year: ", filteredData);
         createScatterPlotGrossRating(filteredData, stardata);
     });
-
     createScatterPlotGrossRating(data, stardata);
 }
-
-
 
 function filterDataByGenre(data, genresAsArray) {
     let filteredData;
@@ -429,7 +394,6 @@ function filterDataByYear(data, selectedYear) {
 }
 
 function createLinePlot(data) {
-
     d3.select(".numberOfMovies").html("");
 
     const yearsData = d3.nest()
@@ -529,8 +493,6 @@ function createLinePlotGross(data) {
         .rollup(values => d3.mean(values, d => d.gross))
         .entries(data);
 
-
-
     console.log(yearsData);
 
     yearsData.sort((a, b) => d3.ascending(a.key, b.key));
@@ -612,9 +574,7 @@ function createLinePlotGross(data) {
         .attr("x2", d => x(d))
         .attr("y1", 0)
         .attr("y2", height);
-
 }
-
 
 function calculateLinearRegression(data) {
     const validData = data.filter(d => !isNaN(+d.gross) && !isNaN(+d.rating));
@@ -638,9 +598,6 @@ function calculateLinearRegression(data) {
 
 
 function createScatterPlotGrossRating(data, stardata) {
-
-
-
     const filteredData = data.filter(d => !isNaN(+d.gross) && +d.gross > 1);
 
     const maxGross = d3.max(filteredData, d => +d.gross);
@@ -873,7 +830,6 @@ function countGenreAppearances(data) {
 }
 
 function createGenreCombinationBarChart(data) {
-    // Remove any existing svg elements in the target container
     d3.select(".barChart").selectAll("svg").remove();
 
     // Sort the data and take the top 10 genre combinations
@@ -881,12 +837,10 @@ function createGenreCombinationBarChart(data) {
         return b.count - a.count;
     }).slice(0, 10);
 
-    // Set the dimensions and margins of the graph
     var margin = { top: 30, right: 30, bottom: 70, left: 60 },
         width = 460 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
-    // Append the svg object to the .barChart div
     var svg = d3.select(".barChartGenre")
         .append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -894,7 +848,6 @@ function createGenreCombinationBarChart(data) {
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    // X axis
     var x = d3.scaleBand()
         .range([0, width])
         .domain(topCombinations.map(d => d.combination))
@@ -906,14 +859,12 @@ function createGenreCombinationBarChart(data) {
         .attr("transform", "translate(-10,0)rotate(-45)")
         .style("text-anchor", "end");
 
-    // Y axis
     var y = d3.scaleLinear()
         .domain([0, d3.max(topCombinations, d => d.count)])
         .range([height, 0]);
     svg.append("g")
         .call(d3.axisLeft(y));
 
-    // Bars
     svg.selectAll("myBar")
         .data(topCombinations)
         .enter()
