@@ -15,9 +15,12 @@ d3.csv("data/movies-originalDataset.csv", function (data) {
 
     connectGenreSelectionToLinePlot(data);
     connectYearSelectionToScatterPlot(data);
-    createScatterPlotGrossRating(data);
-
-
+    d3.csv("data/star_appearances.csv", function (starsData) {
+        console.log("stars data loaded");
+        createAppearancesBarChart(starsData);
+        createScatterPlotGrossRating(data, starsData);
+        connectYearSelectionToScatterPlot(data, starsData);
+    });
 
 })
 
@@ -196,7 +199,7 @@ function transformElement(element, data) {
         const cachedMovieData = JSON.parse(localStorage.getItem('movieData'));
         if (cachedMovieData && cachedMovieData[movieTitle]) {
             console.log('Using cached data from localStorage for:', movieTitle);
-            movieDataCache = cachedMovieData; // Update the in-memory cache
+            movieDataCache = cachedMovieData; 
             useMovieData(cachedMovieData[movieTitle], element);
             return;
         }
@@ -269,9 +272,6 @@ function transformElement(element, data) {
 
 
 }
-
-
-
 
 function fillGenreSelections(data) {
     var genres = ["all"]
@@ -374,7 +374,7 @@ function connectGenreSelectionToLinePlot(data) {
 
 }
 
-function connectYearSelectionToScatterPlot(data) {
+function connectYearSelectionToScatterPlot(data, stardata) {
     const select = d3.select("#yearSelection");
     select.on("change", function () {
         const selectedYear = this.value;
@@ -383,10 +383,10 @@ function connectYearSelectionToScatterPlot(data) {
 
 
         console.log("filtered data year: ", filteredData);
-        createScatterPlotGrossRating(filteredData);
+        createScatterPlotGrossRating(filteredData, stardata);
     });
 
-    createScatterPlotGrossRating(data);
+    createScatterPlotGrossRating(data, stardata);
 }
 
 
@@ -492,7 +492,7 @@ function createLinePlot(data) {
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
 
-    // Append horizontal grid lines
+    
     svg.selectAll("horizontalGrid")
         .data(y.ticks(5))
         .enter()
@@ -503,7 +503,7 @@ function createLinePlot(data) {
         .attr("y1", d => y(d))
         .attr("y2", d => y(d));
 
-    // Append vertical grid lines
+ 
     svg.selectAll("verticalGrid")
         .data(x.ticks(5))
         .enter()
@@ -598,7 +598,6 @@ function createLinePlotGross(data) {
         .attr("y1", d => y(d))
         .attr("y2", d => y(d));
 
-    // Append vertical grid lines
     svg.selectAll("verticalGrid")
         .data(x.ticks(5))
         .enter()
@@ -615,7 +614,7 @@ function createLinePlotGross(data) {
 function calculateLinearRegression(data) {
     const validData = data.filter(d => !isNaN(+d.gross) && !isNaN(+d.rating));
     if (validData.length < 2) {
-        return { slope: 0, intercept: 0 }; // Return a default value if there isn't enough valid data.
+        return { slope: 0, intercept: 0 }; 
     }
 
     const n = validData.length;
@@ -633,13 +632,11 @@ function calculateLinearRegression(data) {
 
 
 
-function createScatterPlotGrossRating(data) {
-
+function createScatterPlotGrossRating(data, stardata) {
 
 
 
     const filteredData = data.filter(d => !isNaN(+d.gross) && +d.gross > 1);
-
 
     const maxGross = d3.max(filteredData, d => +d.gross);
 
@@ -648,14 +645,11 @@ function createScatterPlotGrossRating(data) {
         else if (+d['Cluster 2'] === 1) d.clusterLabel = 2;
         else if (+d['Cluster 3'] === 1) d.clusterLabel = 3;
         else if (+d['Cluster 4'] === 1) d.clusterLabel = 4;
-        else d.clusterLabel = null; // In case none of the clusters are marked
+        else d.clusterLabel = null; 
     });
 
-
     const trendlineData = calculateLinearRegression(filteredData);
-
     d3.select(".scatterPlot").html("");
-
     const margin = { top: 20, right: 20, bottom: 40, left: 40 };
     const width = 600 - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
@@ -680,6 +674,19 @@ function createScatterPlotGrossRating(data) {
     const yScale = d3.scaleLinear()
         .domain([yDomainLowerLimit, 10])
         .range([height, 0]);
+
+    const brush = d3.brushX()
+        .extent([[0, 0], [width, height]])
+        .on("brush", brushed)
+        .on("end", brushEnded);
+
+
+        const brushG = svg.append("g")
+        .attr("class", "brush")
+        .call(brush);
+
+
+
 
 
     const tooltip = d3.select(".scatterPlot")
@@ -706,6 +713,8 @@ function createScatterPlotGrossRating(data) {
         .style("opacity", 0.8)
 
 
+
+
         .on("mouseover", function (event, index) {
             const d = filteredData[index];
             const d3Tooltip = tooltip.node();
@@ -725,9 +734,24 @@ function createScatterPlotGrossRating(data) {
             const y = (containerY + (scatterPlotHeight * 0.05))
             console.log(x, y)
 
+
             tooltip.html(`Title: ${d.title}<br>Gross: ${d.gross}<br>Rating: ${d.rating}`)
                 .style("left", (x) + "px")
                 .style("top", (y) + "px");
+
+            const movieTitle = d.title; // Get the movie title from the hovered point
+            const filteredStars = stardata.filter(star => {
+
+                const searchPattern = `'${movieTitle}'`;
+                return star.movies.includes(searchPattern);
+            });
+
+            filterAndDisplayStarsData(filteredStars);
+
+
+
+
+
         })
 
         .on("mouseout", () => {
@@ -783,10 +807,96 @@ function createScatterPlotGrossRating(data) {
         .attr("y1", 0)
         .attr("y2", height);
 
+    function brushed(event) {
+        
+    }
 
+    function brushEnded(event) {
+        
+    }
 
 
 }
+
+function filterAndDisplayStarsData(data) {
+    console.log(data)
+    createAppearancesBarChart(data);
+}
+
+
+function createAppearancesBarChart(data) {
+   
+    d3.select(".barChart").selectAll("svg").remove(); 
+
+  
+    data.forEach(function (d) {
+        d.appearances = +d.appearances;
+    });
+
+
+    var topStars = data.sort(function (a, b) {
+        return b.appearances - a.appearances;
+    }).slice(0, 10);
+
+  
+    var margin = { top: 30, right: 30, bottom: 70, left: 60 },
+        width = 460 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
+
+   
+    var svg = d3.select(".barChart")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+
+    var x = d3.scaleBand()
+        .range([0, width])
+        .domain(topStars.map(d => d.stars))
+        .padding(0.2);
+    svg.append("g")
+        .attr("transform", `translate(0,${height})`)
+        .call(d3.axisBottom(x))
+        .selectAll("text")
+        .attr("transform", "translate(-10,0)rotate(-45)")
+        .style("text-anchor", "end");
+
+ 
+    var y = d3.scaleLinear()
+        .domain([0, d3.max(topStars, d => d.appearances)])
+        .range([height, 0]);
+    svg.append("g")
+        .call(d3.axisLeft(y));
+
+   
+    svg.selectAll("mybar")
+        .data(topStars)
+        .enter()
+        .append("rect")
+        .attr("x", d => x(d.stars))
+        .attr("y", d => y(d.appearances))
+        .attr("width", x.bandwidth())
+        .attr("height", d => height - y(d.appearances))
+        .attr("fill", "#69b3a2");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
