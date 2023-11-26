@@ -15,6 +15,7 @@ d3.csv("data/movies-originalDataset.csv", function (data) {
 
     connectGenreSelectionToLinePlot(data);
     connectYearSelectionToScatterPlot(data);
+    countGenreAppearances(data);
     d3.csv("data/star_appearances.csv", function (starsData) {
         console.log("stars data loaded");
         createAppearancesBarChart(starsData);
@@ -199,7 +200,7 @@ function transformElement(element, data) {
         const cachedMovieData = JSON.parse(localStorage.getItem('movieData'));
         if (cachedMovieData && cachedMovieData[movieTitle]) {
             console.log('Using cached data from localStorage for:', movieTitle);
-            movieDataCache = cachedMovieData; 
+            movieDataCache = cachedMovieData;
             useMovieData(cachedMovieData[movieTitle], element);
             return;
         }
@@ -492,7 +493,7 @@ function createLinePlot(data) {
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
 
-    
+
     svg.selectAll("horizontalGrid")
         .data(y.ticks(5))
         .enter()
@@ -503,7 +504,7 @@ function createLinePlot(data) {
         .attr("y1", d => y(d))
         .attr("y2", d => y(d));
 
- 
+
     svg.selectAll("verticalGrid")
         .data(x.ticks(5))
         .enter()
@@ -614,7 +615,7 @@ function createLinePlotGross(data) {
 function calculateLinearRegression(data) {
     const validData = data.filter(d => !isNaN(+d.gross) && !isNaN(+d.rating));
     if (validData.length < 2) {
-        return { slope: 0, intercept: 0 }; 
+        return { slope: 0, intercept: 0 };
     }
 
     const n = validData.length;
@@ -645,7 +646,7 @@ function createScatterPlotGrossRating(data, stardata) {
         else if (+d['Cluster 2'] === 1) d.clusterLabel = 2;
         else if (+d['Cluster 3'] === 1) d.clusterLabel = 3;
         else if (+d['Cluster 4'] === 1) d.clusterLabel = 4;
-        else d.clusterLabel = null; 
+        else d.clusterLabel = null;
     });
 
     const trendlineData = calculateLinearRegression(filteredData);
@@ -675,19 +676,8 @@ function createScatterPlotGrossRating(data, stardata) {
         .domain([yDomainLowerLimit, 10])
         .range([height, 0]);
 
-    const brush = d3.brushX()
-        .extent([[0, 0], [width, height]])
-        .on("brush", brushed)
-        .on("end", brushEnded);
-
-
-        const brushG = svg.append("g")
-        .attr("class", "brush")
-        .call(brush);
-
-
-
-
+    // add brushing here 
+  
 
     const tooltip = d3.select(".scatterPlot")
         .append("div")
@@ -807,14 +797,6 @@ function createScatterPlotGrossRating(data, stardata) {
         .attr("y1", 0)
         .attr("y2", height);
 
-    function brushed(event) {
-        
-    }
-
-    function brushEnded(event) {
-        
-    }
-
 
 }
 
@@ -825,10 +807,10 @@ function filterAndDisplayStarsData(data) {
 
 
 function createAppearancesBarChart(data) {
-   
-    d3.select(".barChart").selectAll("svg").remove(); 
 
-  
+    d3.select(".barChart").selectAll("svg").remove();
+
+
     data.forEach(function (d) {
         d.appearances = +d.appearances;
     });
@@ -838,12 +820,12 @@ function createAppearancesBarChart(data) {
         return b.appearances - a.appearances;
     }).slice(0, 10);
 
-  
+
     var margin = { top: 30, right: 30, bottom: 70, left: 60 },
         width = 460 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
-   
+
     var svg = d3.select(".barChart")
         .append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -863,14 +845,14 @@ function createAppearancesBarChart(data) {
         .attr("transform", "translate(-10,0)rotate(-45)")
         .style("text-anchor", "end");
 
- 
+
     var y = d3.scaleLinear()
         .domain([0, d3.max(topStars, d => d.appearances)])
         .range([height, 0]);
     svg.append("g")
         .call(d3.axisLeft(y));
 
-   
+
     svg.selectAll("mybar")
         .data(topStars)
         .enter()
@@ -881,6 +863,82 @@ function createAppearancesBarChart(data) {
         .attr("height", d => height - y(d.appearances))
         .attr("fill", "#69b3a2");
 }
+
+
+function countGenreAppearances(data) {
+    const combinationCounts = {};
+    data.forEach(movie => {
+        let genres = movie.genre.split(', ');
+        genres.sort();
+        const combinationKey = genres.join(', ');
+        if (combinationKey in combinationCounts) {
+            combinationCounts[combinationKey]++;
+        } else {
+            combinationCounts[combinationKey] = 1;
+        }
+    });
+    const combinationCountsArray = Object.keys(combinationCounts).map(key => {
+        return { combination: key, count: combinationCounts[key] };
+    });
+    console.log(combinationCountsArray);
+    createGenreCombinationBarChart(combinationCountsArray);
+}
+
+
+function createGenreCombinationBarChart(data) {
+    // Remove any existing svg elements in the target container
+    d3.select(".barChart").selectAll("svg").remove();
+
+    // Sort the data and take the top 10 genre combinations
+    var topCombinations = data.sort(function (a, b) {
+        return b.count - a.count;
+    }).slice(0, 10);
+
+    // Set the dimensions and margins of the graph
+    var margin = { top: 30, right: 30, bottom: 70, left: 60 },
+        width = 460 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
+
+    // Append the svg object to the .barChart div
+    var svg = d3.select(".barChartGenre")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // X axis
+    var x = d3.scaleBand()
+        .range([0, width])
+        .domain(topCombinations.map(d => d.combination))
+        .padding(0.2);
+    svg.append("g")
+        .attr("transform", `translate(0,${height})`)
+        .call(d3.axisBottom(x))
+        .selectAll("text")
+        .attr("transform", "translate(-10,0)rotate(-45)")
+        .style("text-anchor", "end");
+
+    // Y axis
+    var y = d3.scaleLinear()
+        .domain([0, d3.max(topCombinations, d => d.count)])
+        .range([height, 0]);
+    svg.append("g")
+        .call(d3.axisLeft(y));
+
+    // Bars
+    svg.selectAll("myBar")
+        .data(topCombinations)
+        .enter()
+        .append("rect")
+        .attr("x", d => x(d.combination))
+        .attr("y", d => y(d.count))
+        .attr("width", x.bandwidth())
+        .attr("height", d => height - y(d.count))
+        .attr("fill", "#69b3a2");
+}
+
+
 
 
 
