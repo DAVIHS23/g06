@@ -46,8 +46,6 @@
         <div class="incomeTreeMap"></div>
     </div> -->
 
-    <!-- TODO: center diagrams -->
-    <!-- TODO: put diagrams next to each other when there is space -->
     <!-- TODO: background images -->
     <!-- TODO: always show pointer cursor over treemap also text -->
     <!-- TODO: show full poster -->
@@ -65,6 +63,7 @@
                         <option value="all">All Genres</option>
                     </select>
                 </div>
+                <div class="text-center">(Click for movie poster for inspiration)</div>
                 <div class="incomeTreeMap mt-3"></div>
             </div>
         </div>
@@ -74,7 +73,7 @@
         <div class="row">
             <h2 class="text-center">Movie Ratings Range</h2>
             <div class="row mt-3">
-                <div class="col-md-12 d-flex justify-content-between">
+                <div id="movieRatingsSlider"class="col-md-12 d-flex justify-content-between">
                     <span id="minRatingDisplay">Min in data: 1</span>
                     <div id="ratingSlider" class="flex-grow-1"></div>
                     <span id="maxRatingDisplay">Max: 10</span>
@@ -98,10 +97,18 @@
             <!-- add title and description for each (average income mention missing datapoints)-->
             <div class="col-md-12 col-lg-6">
                 <h3 class="text-center">Number of Movies</h3>
+                <div class="text-center">This diagram shows how many movies were released in what year from the top 10'000 (filtered by your criteria).</div>
                 <div class="numberOfMovies"></div>
             </div>
             <div class="col-md-12 col-lg-6">
                 <h3 class="text-center">Income Per Year</h3>
+                <!-- TODO: add millions or billions unit -->
+                <div class="text-center">
+                    This diagram shows the average income per year (filtered by your criteria).
+                    <br>
+                    <span class="text-danger">Note:</span> Some movies have no income data.
+                </div>
+
                 <div class="incomePerYear"></div>
             </div>
         </div>
@@ -112,6 +119,7 @@
             <!-- <h2>Ratings and Income</h2> -->
             <h2 class="text-center">Box office close vs. Ratings for movies</h2>
             <!-- TODO: force user to select a year-->
+            <!-- TODO: only show years with data -->
             <div>
                 <label for="yearSelection">Year:</label>
                 <select name="yearSelection" id="yearSelection" class="yearSelection">
