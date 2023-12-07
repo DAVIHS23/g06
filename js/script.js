@@ -704,6 +704,24 @@ function createScatterPlotGrossRating(data, stardata) {
 
     // --- END BRUSHING ---
 
+    svg.on("click", function(event) {
+        if (d3.event.target.tagName !== 'circle') {
+
+            if (selectedCircle) {
+                selectedCircle.classed("selected", false);
+            }
+            selectedCircle = null;
+            
+            tooltip.transition()
+            .duration(200)
+            .style("opacity", 0);
+    
+            filterAndDisplayStarsData(stardata);
+        }
+    });
+
+    let selectedCircle = null;
+
     svg.selectAll("circle")
         .data(filteredData)
         .enter()
@@ -716,7 +734,13 @@ function createScatterPlotGrossRating(data, stardata) {
         .style("opacity", 0.8)
 
 
-        .on("mouseover", function (event, index) {
+        .on("click", function (event, index) {
+
+            if (selectedCircle) {
+                selectedCircle.classed("selected", false);
+            }
+    
+            selectedCircle = d3.select(this).classed("selected", true);
             const d = filteredData[index];
             const d3Tooltip = tooltip.node();
             const scatterPlotContainer = d3.select(".scatterPlot").node();
@@ -747,14 +771,7 @@ function createScatterPlotGrossRating(data, stardata) {
             filterAndDisplayStarsData(filteredStars);
         })
 
-        .on("mouseout", () => {
-            tooltip.transition()
-                .duration(0)
-                .style("opacity", 0);
-            filterAndDisplayStarsData(stardata)
-                
-          
-        });
+  
 
 
 

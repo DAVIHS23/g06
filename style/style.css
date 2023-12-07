@@ -67,3 +67,8 @@ svg {
 #maxRatingDisplay {
     margin-left: 20px;
 }
+
+.selected {
+    stroke: red; /* Black stroke for the selected circle */
+    stroke-width: 2; /* Stroke width */
+}
