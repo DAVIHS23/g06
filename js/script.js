@@ -637,8 +637,6 @@ function createScatterPlotGrossRating(data, stardata) {
         .domain([yDomainLowerLimit, 10])
         .range([height, 0]);
 
-    // add brushing here
-
 
     const tooltip = d3.select(".scatterPlot")
         .append("div")
@@ -652,6 +650,60 @@ function createScatterPlotGrossRating(data, stardata) {
         .domain([1, 2, 3, 4])
         .range(["#0f62fe", "#8a3ffc", "0072c", "#198038"]);
 
+    // --- BRUSHING ---
+
+
+    const brush = d3.brush()
+        .extent([[0, 0], [width, height]])
+        .on("start brush", brushed)
+        .on("end", brushEnded);
+
+    svg.append("g")
+        .attr("class", "brush")
+        .call(brush);
+
+        countGenreAppearances(filteredData);
+
+    function brushed() {
+        const selection = d3.event.selection;
+
+        if (selection) {
+            const [[x0, y0], [x1, y1]] = selection;
+            let selectedMovies = []; // Array to store data of selected movies
+
+            svg.selectAll("circle")
+                .each(function (d) {
+                    const cx = xScale(d.gross);
+                    const cy = yScale(d.rating);
+
+                    if (x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1) {
+                        if (!selectedMovies.some(movie => movie === d)) {
+                            selectedMovies.push(d);
+                            console.log(selectedMovies)
+                        }
+
+                    }
+                });
+
+                if (selectedMovies.length > 0) {
+                    countGenreAppearances(selectedMovies);
+                }
+
+           
+        }
+    }
+
+
+    function brushEnded(event) {
+        if(!d3.event.selection){
+            countGenreAppearances(filteredData);
+        }
+       
+
+    }
+
+    // --- END BRUSHING ---
+
     svg.selectAll("circle")
         .data(filteredData)
         .enter()
@@ -662,8 +714,6 @@ function createScatterPlotGrossRating(data, stardata) {
         //.style("fill", "#33b1ff")
         .style("fill", d => colorScale(d.clusterLabel))
         .style("opacity", 0.8)
-
-
 
 
         .on("mouseover", function (event, index) {
@@ -701,7 +751,12 @@ function createScatterPlotGrossRating(data, stardata) {
             tooltip.transition()
                 .duration(0)
                 .style("opacity", 0);
+            filterAndDisplayStarsData(stardata)
+                
+          
         });
+
+
 
     svg.append("g")
         .attr("transform", `translate(0, ${height})`)
@@ -748,6 +803,7 @@ function createScatterPlotGrossRating(data, stardata) {
         .attr("x2", d => xScale(d))
         .attr("y1", 0)
         .attr("y2", height);
+
 }
 
 function filterAndDisplayStarsData(data) {
@@ -830,9 +886,6 @@ function countGenreAppearances(data) {
 }
 
 function createGenreCombinationBarChart(data) {
-    d3.select(".barChart").selectAll("svg").remove();
-
-    // Sort the data and take the top 10 genre combinations
     var topCombinations = data.sort(function (a, b) {
         return b.count - a.count;
     }).slice(0, 10);
@@ -841,37 +894,63 @@ function createGenreCombinationBarChart(data) {
         width = 460 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
-    var svg = d3.select(".barChartGenre")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", `translate(${margin.left},${margin.top})`);
+    var svg = d3.select(".barChartGenre").select("svg");
+    var g;
+    if (svg.empty()) {
+        svg = d3.select(".barChartGenre")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom);
+        g = svg.append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+    } else {
+        g = svg.select("g");
+    }
 
     var x = d3.scaleBand()
         .range([0, width])
-        .domain(topCombinations.map(d => d.combination))
+        .domain(topCombinations.map(function (d) { return d.combination; }))
         .padding(0.2);
-    svg.append("g")
+
+    var y = d3.scaleLinear()
+        .domain([0, d3.max(topCombinations, function (d) { return d.count; })])
+        .range([height, 0]);
+
+    // Check if the x-axis already exists
+    var xAxis = g.selectAll(".x-axis").data([0]);
+    var newXAxis = xAxis.enter().append("g").attr("class", "x-axis");
+    xAxis.merge(newXAxis)
         .attr("transform", `translate(0,${height})`)
+        .transition()
+        .duration(500)
         .call(d3.axisBottom(x))
         .selectAll("text")
         .attr("transform", "translate(-10,0)rotate(-45)")
         .style("text-anchor", "end");
 
-    var y = d3.scaleLinear()
-        .domain([0, d3.max(topCombinations, d => d.count)])
-        .range([height, 0]);
-    svg.append("g")
+    // Check if the y-axis already exists
+    var yAxis = g.selectAll(".y-axis").data([0]);
+    var newYAxis = yAxis.enter().append("g").attr("class", "y-axis");
+    yAxis.merge(newYAxis)
+        .transition()
+        .duration(500)
         .call(d3.axisLeft(y));
 
-    svg.selectAll("myBar")
-        .data(topCombinations)
-        .enter()
-        .append("rect")
-        .attr("x", d => x(d.combination))
-        .attr("y", d => y(d.count))
+    var bars = g.selectAll("rect")
+        .data(topCombinations, function (d) { return d.combination; });
+
+    bars.enter().append("rect")
+        .merge(bars)
+        .transition()
+        .duration(500)
+        .attr("x", function (d) { return x(d.combination); })
+        .attr("y", function (d) { return y(d.count); })
         .attr("width", x.bandwidth())
-        .attr("height", d => height - y(d.count))
+        .attr("height", function (d) { return height - y(d.count); })
         .attr("fill", "#69b3a2");
+
+    bars.exit().remove();
 }
+
+
+
