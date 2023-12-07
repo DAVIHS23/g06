@@ -755,8 +755,8 @@ function createScatterPlotGrossRating(data, stardata) {
 
             //Lessons Learned: With overlapping points the tooltip calculation based on coordinates does not work
             console.log(containerX, containerY)
-            const x = (containerX + (scatterPlotRight * 0.9))
-            const y = (containerY + (scatterPlotHeight * 0.05))
+            const x = (containerX + (scatterPlotRight * 0.6))
+            const y = (containerY + (scatterPlotHeight * 0.001))
             console.log(x, y)
 
             tooltip.html(`Title: ${d.title}<br>Gross: ${d.gross}<br>Rating: ${d.rating}`)
