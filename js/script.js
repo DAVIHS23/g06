@@ -933,7 +933,6 @@ function createGenreCombinationBarChart(data) {
         .domain([0, d3.max(topCombinations, function (d) { return d.count; })])
         .range([height, 0]);
 
-    // Check if the x-axis already exists
     var xAxis = g.selectAll(".x-axis").data([0]);
     var newXAxis = xAxis.enter().append("g").attr("class", "x-axis");
     xAxis.merge(newXAxis)
@@ -945,7 +944,6 @@ function createGenreCombinationBarChart(data) {
         .attr("transform", "translate(-10,0)rotate(-45)")
         .style("text-anchor", "end");
 
-    // Check if the y-axis already exists
     var yAxis = g.selectAll(".y-axis").data([0]);
     var newYAxis = yAxis.enter().append("g").attr("class", "y-axis");
     yAxis.merge(newYAxis)
