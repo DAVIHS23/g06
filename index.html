@@ -59,6 +59,54 @@
         <!-- TODO: adding a legend (color based on income)-->
         <!-- TODO: nested tree map -->
         <!-- TODO: add description per diagram? -->
+
+        <div class="container">
+            <div class="row">
+                <h2 class="text-center">Box office close vs. Ratings for movies</h2>
+                <div>
+                    <label for="yearSelection">Year:</label>
+                    <select name="yearSelection" id="yearSelection"
+                        class="yearSelection">
+                        <option value="all">All Movies</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <!-- Scatter Plot Column -->
+                <div class="col-md-6 col-lg-6">
+                    <div class="scatterPlot">Income Per Year</div>
+                </div>
+
+                <!-- Movie Factsheet Column -->
+                <div class="col-md-6 col-lg-6">
+                    <div class="movieFactsheet">
+                        <div id="movieDetails" class="movie-details"></div>
+                       
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row text-center">
+                <!-- Top Stars Appearances Chart -->
+                <div class="col-md-12 col-lg-6">
+                    <h2>Top Stars Appearances</h2>
+                    <div class="barChart"></div>
+                </div>
+                <!-- Top Genre Combinations Chart -->
+                <div class="col-md-12 col-lg-6">
+                    <h2>Top Genre Combinations</h2>
+                    <div class="barChartGenre"></div>
+                </div>
+            </div>
+        </div>
+
+
+
         <div class="container">
             <div class="row">
                 <div class="col-12 col-lg-12 mx-auto">
@@ -129,50 +177,7 @@
                 </div>
             </div>
         </div>
-        <div class="container">
-            <div class="row">
-                <h2 class="text-center">Box office close vs. Ratings for movies</h2>
-                <div>
-                    <label for="yearSelection">Year:</label>
-                    <select name="yearSelection" id="yearSelection"
-                        class="yearSelection">
-                        <option value="all">All Movies</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row">
-                <!-- Scatter Plot Column -->
-                <div class="col-md-6 col-lg-6">
-                    <div class="scatterPlot">Income Per Year</div>
-                </div>
 
-                <!-- Movie Factsheet Column -->
-                <div class="col-md-6 col-lg-6">
-                    <div class="movieFactsheet">
-                        <div id="movieDetails" class="movie-details"></div>
-                       
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row text-center">
-                <!-- Top Stars Appearances Chart -->
-                <div class="col-md-12 col-lg-6">
-                    <h2>Top Stars Appearances</h2>
-                    <div class="barChart"></div>
-                </div>
-                <!-- Top Genre Combinations Chart -->
-                <div class="col-md-12 col-lg-6">
-                    <h2>Top Genre Combinations</h2>
-                    <div class="barChartGenre"></div>
-                </div>
-            </div>
-        </div>
 
         <div class="container">
             <div class="row text-center">
