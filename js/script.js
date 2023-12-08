@@ -10,10 +10,16 @@ d3.csv("data/movies-originalDataset.csv", function (data) {
     fillGenreSelections(data);
     fillYearSelections(data);
 
-    createGenreSelectionIncomeTreeMap(data);
 
-    connectGenreSelectionToLinePlot(data);
-    connectYearSelectionToScatterPlot(data);
+    d3.csv("data/movies-treemap.csv", function (treeData) {
+        console.log("treedata loaded");
+        createGenreSelectionIncomeTreeMap(treeData);
+        connectGenreSelectionToLinePlot(treeData);
+        connectYearSelectionToScatterPlot(treeData);
+
+        
+    });
+
     countGenreAppearances(data);
     d3.csv("data/star_appearances.csv", function (starsData) {
         console.log("stars data loaded");
@@ -22,6 +28,8 @@ d3.csv("data/movies-originalDataset.csv", function (data) {
         connectYearSelectionToScatterPlot(data, starsData);
     });
 })
+
+
 
 function createGenreSelectionIncomeTreeMap(data) {
     select = d3.select("#genreSelectionIncomeTreeMap");
