@@ -14,12 +14,13 @@ d3.csv("data/movies-originalDataset.csv", function (data) {
     d3.csv("data/movies-treemap.csv", function (treeData) {
         console.log("treedata loaded");
         createGenreSelectionIncomeTreeMap(treeData);
-        connectGenreSelectionToLinePlot(treeData);
-        connectYearSelectionToScatterPlot(treeData);
+       
 
         
     });
 
+    connectGenreSelectionToLinePlot(data);
+    connectYearSelectionToScatterPlot(data);
     countGenreAppearances(data);
     d3.csv("data/star_appearances.csv", function (starsData) {
         console.log("stars data loaded");
