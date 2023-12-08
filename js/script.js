@@ -2,6 +2,8 @@
 //var myCarousel = new bootstrap.Carousel(document.querySelector('#topCarousel'));
 
 // d3 js
+const apiKey = 'dd5aa8d86c1d4b5fce9ef36da52df818';
+
 d3.csv("data/movies-originalDataset.csv", function (data) {
     console.log("data loaded")
 
@@ -186,7 +188,6 @@ function transformElement(element, data) {
             return;
         }
 
-        const apiKey = 'dd5aa8d86c1d4b5fce9ef36da52df818';
         fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(movieTitle)}`)
             .then(response => response.json())
             .then(data => {
@@ -662,14 +663,14 @@ function createScatterPlotGrossRating(data, stardata) {
         .attr("class", "brush")
         .call(brush);
 
-        countGenreAppearances(filteredData);
+    countGenreAppearances(filteredData);
 
     function brushed() {
         const selection = d3.event.selection;
 
         if (selection) {
             const [[x0, y0], [x1, y1]] = selection;
-            let selectedMovies = []; // Array to store data of selected movies
+            let selectedMovies = [];
 
             svg.selectAll("circle")
                 .each(function (d) {
@@ -685,37 +686,33 @@ function createScatterPlotGrossRating(data, stardata) {
                     }
                 });
 
-                if (selectedMovies.length > 0) {
-                    countGenreAppearances(selectedMovies);
-                }
-
-           
+            if (selectedMovies.length > 0) {
+                countGenreAppearances(selectedMovies);
+            }
         }
     }
 
 
     function brushEnded(event) {
-        if(!d3.event.selection){
+        if (!d3.event.selection) {
             countGenreAppearances(filteredData);
         }
-       
-
     }
 
     // --- END BRUSHING ---
 
-    svg.on("click", function(event) {
+    svg.on("click", function (event) {
         if (d3.event.target.tagName !== 'circle') {
 
             if (selectedCircle) {
                 selectedCircle.classed("selected", false);
             }
             selectedCircle = null;
-            
-            tooltip.transition()
-            .duration(200)
-            .style("opacity", 0);
-    
+
+            /*tooltip.transition()
+                .duration(200)
+                .style("opacity", 0);*/
+
             filterAndDisplayStarsData(stardata);
         }
     });
@@ -739,7 +736,9 @@ function createScatterPlotGrossRating(data, stardata) {
             if (selectedCircle) {
                 selectedCircle.classed("selected", false);
             }
-    
+
+
+
             selectedCircle = d3.select(this).classed("selected", true);
             const d = filteredData[index];
             const d3Tooltip = tooltip.node();
@@ -749,9 +748,12 @@ function createScatterPlotGrossRating(data, stardata) {
             const containerY = scatterPlotContainer.offsetTop;
             const scatterPlotRight = scatterPlotContainer.getBoundingClientRect().right;
             const scatterPlotHeight = scatterPlotContainer.getBoundingClientRect().height;
-            tooltip.transition()
+            /*tooltip.transition()
                 .duration(200)
-                .style("opacity", 0.8);
+                .style("opacity", 0.8);*/
+
+            //Movie details
+            updateMovieDetails(d);
 
             //Lessons Learned: With overlapping points the tooltip calculation based on coordinates does not work
             console.log(containerX, containerY)
@@ -762,16 +764,18 @@ function createScatterPlotGrossRating(data, stardata) {
             tooltip.html(`Title: ${d.title}<br>Gross: ${d.gross}<br>Rating: ${d.rating}`)
                 .style("left", (x) + "px")
                 .style("top", (y) + "px");
-            const movieTitle = d.title; // Get the movie title from the hovered point
+            const movieTitle = d.title; 
             const filteredStars = stardata.filter(star => {
                 const searchPattern = `'${movieTitle}'`;
                 return star.movies.includes(searchPattern);
+               
             });
+        
 
             filterAndDisplayStarsData(filteredStars);
         })
 
-  
+
 
 
 
@@ -969,3 +973,73 @@ function createGenreCombinationBarChart(data) {
 
 
 
+async function updateMovieDetails(movie) {
+    var details = d3.select('#movieDetails');
+    details.html('');
+
+    details.append('h2').text(movie.title + " ("+movie.year+")");
+    details.append('p').text('Rating: ' + movie.rating);
+    details.append('p').text('Genre: ' + movie.genre);
+    details.append('p').text('Cast: ');
+
+    let actorsContainer = details.append('div').attr('class', 'actors-container');
+
+
+
+    if (typeof movie.stars === 'string') {
+        movie.stars = movie.stars.replace(/^\['|'\]$/g, '').split("', '");
+    }
+
+
+
+    if (movie.stars && movie.stars.length > 0) {
+        for (const star of movie.stars) {
+        
+            
+            try {
+                const actorPicture = await getActorPictures([star]);
+                console.log(actorPicture)
+                    if (actorPicture.pictureUrl) {
+                        let actorDiv = actorsContainer.append('div').attr('class', 'actor');
+                        actorDiv.append('img')
+                            .attr('src', actorPicture.pictureUrl)
+                            .attr('alt', `Picture of ${actorPicture.name}`)
+                            .attr('width', 100);
+                        actorDiv.append('h4').text(actorPicture.name);
+
+                    }
+                
+            } catch (error) {
+                console.error('Error fetching actor pictures:', error);
+            }
+        }
+    } else {
+        details.append('p').text('No actor information available.');
+    }
+
+
+}
+
+async function searchActorByName(actorName) {
+    const response = await fetch(`https://api.themoviedb.org/3/search/person?api_key=${apiKey}&query=${encodeURIComponent(actorName)}`);
+    const data = await response.json();
+
+    if (data.results.length > 0) {
+        const actorId = data.results[0].id;
+        const profilePath = data.results[0].profile_path;
+        return { actorId, profilePath };
+    } else {
+        return { actorId: null, profilePath: null };
+    }
+}
+
+async function getActorPictures(actorName) {
+    const { actorId, profilePath } = await searchActorByName(actorName);
+
+    let pictureUrl = null;
+    if (profilePath) {
+        pictureUrl = `https://image.tmdb.org/t/p/w500${profilePath}`;
+    }
+
+    return { name: actorName, pictureUrl };
+}

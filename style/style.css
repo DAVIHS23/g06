@@ -72,3 +72,51 @@ svg {
     stroke: red; /* Black stroke for the selected circle */
     stroke-width: 2; /* Stroke width */
 }
+
+.movie-details {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 10px;
+    overflow-x: auto; /* Add horizontal scrolling if content overflows */
+}
+
+.actors-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    overflow-x: auto; 
+   
+}
+
+.actor {
+    width: calc(20% - 10px); 
+    margin-right: 10px; 
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: space-between; 
+    flex-shrink: 0; 
+    white-space: normal; 
+}
+
+.actor img {
+    max-width: 100%; 
+    height: auto; 
+    border-radius: 3px;
+    align-self: flex-end; 
+}
+
+.actor h4 {
+    font-size: 0.7em;
+    margin-top: 5px;
+    margin-bottom: 0; 
+    text-align: center; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    align-self: flex-start; 
+}
+
+
+
+
