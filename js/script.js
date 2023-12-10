@@ -3,6 +3,7 @@
 
 // d3 js
 const apiKey = 'dd5aa8d86c1d4b5fce9ef36da52df818';
+var avgAppearances;
 
 d3.csv("data/movies-originalDataset.csv", function (data) {
     console.log("data loaded")
@@ -14,9 +15,9 @@ d3.csv("data/movies-originalDataset.csv", function (data) {
     d3.csv("data/movies-treemap.csv", function (treeData) {
         console.log("treedata loaded");
         createGenreSelectionIncomeTreeMap(treeData);
-       
 
-        
+
+
     });
 
     connectGenreSelectionToLinePlot(data);
@@ -24,6 +25,7 @@ d3.csv("data/movies-originalDataset.csv", function (data) {
     countGenreAppearances(data);
     d3.csv("data/star_appearances.csv", function (starsData) {
         console.log("stars data loaded");
+        avgAppearances = d3.mean(starsData, function (d) { return d.appearances; });
         createAppearancesBarChart(starsData);
         createScatterPlotGrossRating(data, starsData);
         connectYearSelectionToScatterPlot(data, starsData);
@@ -107,7 +109,7 @@ function createGrossIncomeTreeMap(filteredData) {
 
     const colorScale = d3.scaleLinear()
         .domain([0, d3.max(filteredData, d => d.gross)])
-        .range(["#e5f6ff", "#003a6d"]);
+        .range(["#defbe6", "#044317"]);
 
     const treemapData = treemap(root);
 
@@ -137,6 +139,53 @@ function createGrossIncomeTreeMap(filteredData) {
         .style("text-anchor", "middle")
         .style("font-size", "10px")
         .style("fill", "white");
+
+    
+    const legendWidth = 300;
+    const legendHeight = 20;
+
+    const legendSvg = d3.select('.incomeTreeMap')
+        .append('svg')
+        .attr('width', legendWidth)
+        .attr('height', legendHeight + 40)  
+        .attr('transform', `translate(0, ${legendHeight*0.4})`);  
+
+    const gradient = legendSvg.append('defs')
+        .append('linearGradient')
+        .attr('id', 'gradient')
+        .attr('x1', '0%')
+        .attr('x2', '100%')
+        .attr('y1', '0%')
+        .attr('y2', '0%');
+
+    gradient.append('stop')
+        .attr('offset', '0%')
+        .attr('stop-color', '#defbe6');
+
+    gradient.append('stop')
+        .attr('offset', '100%')
+        .attr('stop-color', '#044317');
+
+    legendSvg.append('rect')
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('width', legendWidth)
+        .attr('height', legendHeight)
+        .style('fill', 'url(#gradient)');
+
+    legendSvg.append('text')
+        .attr('x', 0)
+        .attr('y', legendHeight + 15)  
+        .text('Low Income')
+        .style('font-size', '10px');
+
+    legendSvg.append('text')
+        .attr('x', legendWidth)
+        .attr('y', legendHeight + 15)  
+        .attr('text-anchor', 'end')
+        .text('High Income')
+        .style('font-size', '10px');
+
 }
 
 let movieDataCache = {};
@@ -256,6 +305,10 @@ function transformElement(element, data) {
         fetchData(movieTitle);
         setTimeout(() => removePosterFromElement(element), 3000);
     }
+
+
+
+
 }
 
 function fillGenreSelections(data) {
@@ -440,7 +493,7 @@ function createLinePlot(data) {
         .datum(yearsData)
         .attr("class", "line")
         .attr("d", line)
-        .attr("stroke", "#00539a")
+        .attr("stroke", "#198038")
         .attr("fill", "none");
 
     svg.append("g")
@@ -534,7 +587,7 @@ function createLinePlotGross(data) {
         .datum(yearsData)
         .attr("class", "line")
         .attr("d", line)
-        .attr("stroke", "#00539a")
+        .attr("stroke", "#198038")
         .attr("fill", "none");
 
     svg.append("g")
@@ -658,7 +711,8 @@ function createScatterPlotGrossRating(data, stardata) {
 
     const colorScale = d3.scaleOrdinal()
         .domain([1, 2, 3, 4])
-        .range(["#0f62fe", "#8a3ffc", "0072c", "#198038"]);
+        //.range(["#0f62fe", "#8a3ffc", "0072c", "#198038"]);
+        .range(["#198038", "#0f62fe", "#8a3ffc", "#d02670"]);
 
     // --- BRUSHING ---
 
@@ -773,13 +827,13 @@ function createScatterPlotGrossRating(data, stardata) {
             tooltip.html(`Title: ${d.title}<br>Gross: ${d.gross}<br>Rating: ${d.rating}`)
                 .style("left", (x) + "px")
                 .style("top", (y) + "px");
-            const movieTitle = d.title; 
+            const movieTitle = d.title;
             const filteredStars = stardata.filter(star => {
                 const searchPattern = `'${movieTitle}'`;
                 return star.movies.includes(searchPattern);
-               
+
             });
-        
+
 
             filterAndDisplayStarsData(filteredStars);
         })
@@ -811,7 +865,7 @@ function createScatterPlotGrossRating(data, stardata) {
         .attr("y1", yScale(trendlineData.intercept))
         .attr("x2", xScale(maxGross))
         .attr("y2", yScale(maxGross * trendlineData.slope + trendlineData.intercept))
-        .attr("stroke", "#00539a")
+        .attr("stroke", "#022d0d")
         .attr("stroke-width", 2);
 
     svg.selectAll(".horizontalGrid")
@@ -861,6 +915,8 @@ function createAppearancesBarChart(data) {
         height = 400 - margin.top - margin.bottom;
 
 
+
+
     var svg = d3.select(".barChart")
         .append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -879,9 +935,14 @@ function createAppearancesBarChart(data) {
         .attr("transform", "translate(-10,0)rotate(-45)")
         .style("text-anchor", "end");
 
+
+    var yMax = Math.max(d3.max(topStars, d => d.appearances), avgAppearances);
+
     var y = d3.scaleLinear()
-        .domain([0, d3.max(topStars, d => d.appearances)])
+        .domain([0, yMax])
         .range([height, 0]);
+
+
     svg.append("g")
         .call(d3.axisLeft(y));
 
@@ -893,7 +954,27 @@ function createAppearancesBarChart(data) {
         .attr("y", d => y(d.appearances))
         .attr("width", x.bandwidth())
         .attr("height", d => height - y(d.appearances))
-        .attr("fill", "#69b3a2");
+        .attr("fill", "rgba(25, 128, 56, 0.6)")
+        .attr("stroke", "#198038")
+        .attr("stroke-width", 0.5);
+
+
+
+    svg.append("line")
+        .attr("x1", 0)
+        .attr("x2", width)
+        .attr("y1", y(avgAppearances))
+        .attr("y2", y(avgAppearances))
+        .attr("stroke", "red")
+        .attr("stroke-width", 2)
+        .style("stroke-dasharray", ("3, 3"));
+
+    document.getElementById('averageAppearances').textContent = `(${avgAppearances.toFixed(2)})`;
+    //document.getElementById('mTitle').textContent = `(${d.title.toFixed(2)})`;
+
+
+
+
 }
 
 function countGenreAppearances(data) {
@@ -975,7 +1056,9 @@ function createGenreCombinationBarChart(data) {
         .attr("y", function (d) { return y(d.count); })
         .attr("width", x.bandwidth())
         .attr("height", function (d) { return height - y(d.count); })
-        .attr("fill", "#69b3a2");
+        .attr("fill", "rgba(25, 128, 56, 0.6)")
+        .attr("stroke", "#198038")
+        .attr("stroke-width", 0.5);
 
     bars.exit().remove();
 }
@@ -986,7 +1069,7 @@ async function updateMovieDetails(movie) {
     var details = d3.select('#movieDetails');
     details.html('');
 
-    details.append('h2').text(movie.title + " ("+movie.year+")");
+    details.append('h2').text(movie.title + " (" + movie.year + ")");
     details.append('p').text('Rating: ' + movie.rating);
     details.append('p').text('Genre: ' + movie.genre);
     details.append('p').text('Cast: ');
@@ -1003,21 +1086,21 @@ async function updateMovieDetails(movie) {
 
     if (movie.stars && movie.stars.length > 0) {
         for (const star of movie.stars) {
-        
-            
+
+
             try {
                 const actorPicture = await getActorPictures([star]);
                 console.log(actorPicture)
-                    if (actorPicture.pictureUrl) {
-                        let actorDiv = actorsContainer.append('div').attr('class', 'actor');
-                        actorDiv.append('img')
-                            .attr('src', actorPicture.pictureUrl)
-                            .attr('alt', `Picture of ${actorPicture.name}`)
-                            .attr('width', 100);
-                        actorDiv.append('h4').text(actorPicture.name);
+                if (actorPicture.pictureUrl) {
+                    let actorDiv = actorsContainer.append('div').attr('class', 'actor');
+                    actorDiv.append('img')
+                        .attr('src', actorPicture.pictureUrl)
+                        .attr('alt', `Picture of ${actorPicture.name}`)
+                        .attr('width', 100);
+                    actorDiv.append('h4').text(actorPicture.name);
 
-                    }
-                
+                }
+
             } catch (error) {
                 console.error('Error fetching actor pictures:', error);
             }

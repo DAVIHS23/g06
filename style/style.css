@@ -47,11 +47,11 @@ svg {
 #ratingSlider {
     background-color:white;
     .noUi-handle {
-        background-color: #012749;
+        background-color: #198038;
     }
 
     .noUi-connect {
-        background-color: #e5f6ff;
+        background-color: #defbe6;
     }
 }
 
@@ -69,8 +69,8 @@ svg {
 }
 
 .selected {
-    stroke: red; /* Black stroke for the selected circle */
-    stroke-width: 2; /* Stroke width */
+    stroke: red; 
+    stroke-width: 2; 
 }
 
 .movie-details {
@@ -78,7 +78,7 @@ svg {
     border-radius: 4px;
     padding: 20px;
     margin: 10px;
-    overflow-x: auto; /* Add horizontal scrolling if content overflows */
+    overflow-x: auto; 
 }
 
 .actors-container {
