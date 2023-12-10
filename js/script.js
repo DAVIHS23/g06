@@ -280,6 +280,7 @@ function transformElement(element, data) {
                 };
             })
             .catch(error => console.error('Error:', error));
+
     };
 
     const useMovieData = (movieTitle) => { //from here i have duplicate code but its ok for the moment 
@@ -971,6 +972,7 @@ function createAppearancesBarChart(data) {
 
     document.getElementById('averageAppearances').textContent = `(${avgAppearances.toFixed(2)})`;
     //document.getElementById('mTitle').textContent = `(${d.title.toFixed(2)})`;
+    svg.attr("height", 520);
 
 
 
@@ -1035,7 +1037,7 @@ function createGenreCombinationBarChart(data) {
         .duration(500)
         .call(d3.axisBottom(x))
         .selectAll("text")
-        .attr("transform", "translate(-10,0)rotate(-45)")
+        .attr("transform", "translate(-10,0)rotate(-65)")
         .style("text-anchor", "end");
 
     var yAxis = g.selectAll(".y-axis").data([0]);
@@ -1060,12 +1062,15 @@ function createGenreCombinationBarChart(data) {
         .attr("stroke", "#198038")
         .attr("stroke-width", 0.5);
 
+    svg.attr("height", 520);
+
     bars.exit().remove();
 }
 
 
 
 async function updateMovieDetails(movie) {
+    d3.select("#movieDetailsDescription").remove();
     var details = d3.select('#movieDetails');
     details.html('');
 
