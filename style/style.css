@@ -118,5 +118,24 @@ svg {
 }
 
 
+.card {
+    background: none;
+    border: none;
+ 
+    padding: 5px;
+  }
+  
+  .card-body {
+    padding: 15px;
+  }
+  
+  .card-spacing {
+    margin-bottom: 5px; /* Adjust the space as needed */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+
+
+
 
 
