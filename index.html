@@ -54,13 +54,20 @@
 
         <!-- TODO: show full poster Lenny -->
         <!-- TODO: add description per diagram? Lenny -->
-        <!-- TODO: explain scatter plot colors (legend?) -->
+     
 
         <div class="container">
             <div class="row">
-                <h2 class="text-center">Box office close vs. Ratings for movies</h2>
-                <div>This diagram shows the movie rating from users in relation to the gross income in millions in the box office.</div>
-                <div>Use brushing to select the data</div>
+                <h2 class="text-center">Box office close vs. Ratings for
+                    movies</h2>
+                <!-- Description Row -->
+                <div class="row">
+                    <p class="description text-center">
+                        Explore the scatterplot to see how movies fare in ratings versus earnings. 
+                        Click a point for movie details, or brush to select and uncover genre trends. 
+                        Filter by year and discover patterns within four color-coded rating and income clusters.
+                    </p>
+                </div>
                 <div>
                     <label for="yearSelection">Year:</label>
                     <select name="yearSelection" id="yearSelection"
@@ -150,7 +157,8 @@
                 </div>
                 <div class="d-flex justify-content-between mt-3">
                     <select name="genreSelectionNumberOfMovies"
-                        id="genreSelectionNumberOfMovies" class="genreSelection">
+                        id="genreSelectionNumberOfMovies"
+                        class="genreSelection">
                         <option value="all">All Genres</option>
                     </select>
                 </div>
@@ -189,8 +197,7 @@
                 <div class="row text-center">
                     <h2>Initial Idea</h2>
                     <p>
-                        
-                        
+
                     </p>
                 </div>
             </div>
@@ -202,7 +209,10 @@
                         href="https://www.kaggle.com/datasets/ashutoshdevpura/imdb-top-10000-movies-updated-august-2023">IMDB
                         Top 10'000 movies dataset</a>
                     released on Kaggle.<br>
-                    Additionally, the movie posters and the actor images were taken from <a href="https://www.themoviedb.org/?language=en-US">The Movie DB API</a>.
+                    Additionally, the movie posters and the actor images were
+                    taken from <a
+                        href="https://www.themoviedb.org/?language=en-US">The
+                        Movie DB API</a>.
                 </p>
             </div>
             <div class="row text-center">
@@ -224,7 +234,8 @@
                         <div class="card-body text-center">
                             <h5 class="card-title mb-0">Lenny Budliger</h5>
                             <div class="card-text text-black-50">
-                                <a href="mailto:lenny.Budliger@stud.hslu.ch">lenny.budliger@stud.hslu.ch</a>
+                                <a
+                                    href="mailto:lenny.Budliger@stud.hslu.ch">lenny.budliger@stud.hslu.ch</a>
                             </div>
                             <div class="card-text text-black-50">HSLU Student
                                 (8. Semester)</div>
@@ -238,7 +249,8 @@
                         <div class="card-body text-center">
                             <h5 class="card-title mb-0">Yannis Krämer</h5>
                             <div class="card-text text-black-50">
-                                <a href="mailto:yannis.kraemer@stud.hslu.ch">yannis.kraemer@stud.hslu.ch</a>
+                                <a
+                                    href="mailto:yannis.kraemer@stud.hslu.ch">yannis.kraemer@stud.hslu.ch</a>
                             </div>
                             <div class="card-text text-black-50">HSLU Student
                                 (8. Semester)</div>
@@ -248,7 +260,8 @@
             </div>
             <div class="row text-center" style="margin-top: 20px;">
                 <h2>Tools</h2>
-                <div>The libraries and tools that were used for this project:</div>
+                <div>The libraries and tools that were used for this
+                    project:</div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <a href="https://d3js.org/d3.v4.min.js">
@@ -269,7 +282,8 @@
                         </a>
                     </li>
                     <li>
-                        <a href="https://www.themoviedb.org/?language=en-US">The Movie DB API</a>
+                        <a href="https://www.themoviedb.org/?language=en-US">The
+                            Movie DB API</a>
                     </li>
                     <li class="list-group-item">
                         <a
