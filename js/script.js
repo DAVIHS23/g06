@@ -472,10 +472,15 @@ function createLinePlot(data) {
         width = 600 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
+    var svgWidth = 600;
+    var svgHeight = 400;
+
     const svg = d3.select(".numberOfMovies")
         .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("viewBox", `0 0 ${svgWidth} ${svgHeight}`)
+        .attr("preserveAspectRatio", "xMidYMid meet")
+        .style("max-width", "100%")
+        .style("height", "auto")
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -566,10 +571,14 @@ function createLinePlotGross(data) {
         width = 600 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
+    var svgWidth = 600;
+    var svgHeight = 400;
     const svg = d3.select(".incomePerYear")
         .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("viewBox", `0 0 ${svgWidth} ${svgHeight}`)
+        .attr("preserveAspectRatio", "xMidYMid meet")
+        .style("max-width", "100%")
+        .style("height", "auto")
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -681,10 +690,15 @@ function createScatterPlotGrossRating(data, stardata) {
     const width = 600 - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
 
+    var svgWidth = 600;
+    var svgHeight = 400;
+
     const svg = d3.select(".scatterPlot")
         .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("viewBox", `0 0 ${svgWidth} ${svgHeight}`)
+        .attr("preserveAspectRatio", "xMidYMid meet")
+        .style("max-width", "100%")
+        .style("height", "auto")
         .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
@@ -916,13 +930,15 @@ function createAppearancesBarChart(data) {
         width = 460 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
-
-
+    var svgWidth = 460;
+    var svgHeight = 400;
 
     var svg = d3.select(".barChart")
         .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("viewBox", `0 0 ${svgWidth} ${svgHeight}`)
+        .attr("preserveAspectRatio", "xMidYMid meet")
+        .style("max-width", "100%")
+        .style("height", "auto")
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
@@ -974,10 +990,6 @@ function createAppearancesBarChart(data) {
     document.getElementById('averageAppearances').textContent = `(${avgAppearances.toFixed(2)})`;
     //document.getElementById('mTitle').textContent = `(${d.title.toFixed(2)})`;
     svg.attr("height", 520);
-
-
-
-
 }
 
 function countGenreAppearances(data) {
@@ -1011,10 +1023,14 @@ function createGenreCombinationBarChart(data) {
     var svg = d3.select(".barChartGenre").select("svg");
     var g;
     if (svg.empty()) {
+        var svgWidth = 460;
+        var svgHeight = 400;
         svg = d3.select(".barChartGenre")
             .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom);
+            .attr("viewBox", `0 0 ${svgWidth} ${svgHeight}`)
+            .attr("preserveAspectRatio", "xMidYMid meet")
+            .style("max-width", "100%")
+            .style("height", "auto");
         g = svg.append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
     } else {
