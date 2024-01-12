@@ -23,17 +23,51 @@
 
     <body>
         <!-- TODO: add navigation Yannis -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#topCarousel">Home</a>
                 <a class="navbar-brand" href="#highestGrossingMovies">Highest Grossing Movies</a>
-                <a class="navbar-brand" href="#"></a>
-                <a class="navbar-brand" href="#"></a>
-                <a class="navbar-brand" href="#"></a>
-                <a class="navbar-brand" href="#"></a>
+                <a class="navbar-brand" href="#backgroundInformation">Background information</a>
+                <a class="navbar-brand" href="#sources">Sources</a>
+                <a class="navbar-brand" href="#references">References</a>
                 <a class="navbar-brand" href="#visualDesign">Visual Design Choices</a>
                 <a class="navbar-brand" href="#team">Team</a>
                 <a class="navbar-brand" href="#tools">Tools</a>
+            </div>
+        </nav> -->
+
+        <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#topCarousel">Home</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#highestGrossingMovies">Highest Grossing Movies</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#backgroundInformation">Background information</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#sources">Sources</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#references">References</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#visualDesign">Visual Design Choices</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#team">Team</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#tools">Tools</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </nav>
 
@@ -204,7 +238,7 @@
 
         <div class="container">
             <div class="row text-center">
-                <h2>Background information and initial idea</h2>
+                <h2 id="backgroundInformation">Background information and initial idea</h2>
                 <!--TODO: add initial sketch Yannis-->
                 <div class="row text-center">
                     <h2>Initial Idea</h2>
@@ -214,7 +248,7 @@
                 </div>
             </div>
             <div class="row text-center">
-                <h2>Sources</h2>
+                <h2 id="sources">Sources</h2>
                 <p>
                     The main source for this project is the
                     <a
@@ -228,7 +262,7 @@
                 </p>
             </div>
             <div class="row text-center">
-                <h2>References</h2>
+                <h2 id="references">References</h2>
                 <!-- TODO Yannis-->
                 <!-- section with references to relevant information on your research topic together with findings -->
             </div>
@@ -240,10 +274,9 @@
                             <div class="card card-spacing">
                                 <div class="card-body">
                                     <p class="text-center">
-                                        <strong>2. Treemap</strong>
+                                        <strong>1. Treemap</strong>
                                     </p>
                                     <p class="description text-center">
-
                                         The visualization's design is
                                         thoughtfully chosen to
                                         align with established principles.
@@ -417,6 +450,7 @@
 
 </html>
 
+<!-- TODO: remove this text or not??? -->
 The visualization's design is thoughtfully chosen to
 align with established principles.
 It employs foundational visual design concepts, using
