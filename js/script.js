@@ -5,7 +5,7 @@
 const apiKey = 'dd5aa8d86c1d4b5fce9ef36da52df818';
 var avgAppearances;
 
-d3.csv("data/movies-originalDataset.csv", function (data) {
+d3.csv("data/movies-treemap.csv", function (data) {
     console.log("data loaded")
 
     fillGenreSelections(data);

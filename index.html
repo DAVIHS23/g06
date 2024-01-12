@@ -31,7 +31,7 @@
                 <a class="navbar-brand" href="#"></a>
                 <a class="navbar-brand" href="#"></a>
                 <a class="navbar-brand" href="#"></a>
-                <a class="navbar-brand" href="#visualDesign">Visual Design</a>
+                <a class="navbar-brand" href="#visualDesign">Visual Design Choices</a>
                 <a class="navbar-brand" href="#team">Team</a>
                 <a class="navbar-brand" href="#tools">Tools</a>
             </div>
@@ -66,15 +66,21 @@
         <div class="incomeTreeMap"></div>
     </div> -->
 
-        <!-- TODO: show full poster Lenny -->
-        <!-- TODO: add description per diagram? Lenny -->
-        <!-- TODO: explain scatter plot colors (legend?) -->
-
         <div class="container">
             <div class="row">
-                <h2 class="text-center">Box office close vs. Ratings for movies</h2>
-                <div>This diagram shows the movie rating from users in relation to the gross income in millions in the box office.</div>
-                <div>Use brushing to select the data</div>
+                <h2 class="text-center">Box office close vs. Ratings for
+                    movies</h2>
+                <!-- Description Row -->
+                <div class="row">
+                    <p class="description text-center">
+                        Explore the scatterplot to see how movies fare in
+                        ratings versus earnings.
+                        Click a point for movie details, or brush to select and
+                        uncover genre trends.
+                        Filter by year and discover patterns within four
+                        color-coded rating and income clusters.
+                    </p>
+                </div>
                 <div>
                     <label for="yearSelection">Year:</label>
                     <select name="yearSelection" id="yearSelection"
@@ -120,8 +126,8 @@
                 <!-- Top Genre Combinations Chart -->
                 <div class="col-md-12 col-lg-6">
                     <h2>Most Genre Combinations</h2>
-                    <div class="text-center">(Select area in scatterplot by
-                        brushing)</div>
+                    <div class="text-center">This bar chart displays the 10 most frequent genre combinations found in movies, ranking them from most to least common. 
+                        Selecting an area on the associated scatterplot to further explore </div>
                     <div class="barChartGenre"></div>
                 </div>
             </div>
@@ -164,7 +170,8 @@
                 </div>
                 <div class="d-flex justify-content-between mt-3">
                     <select name="genreSelectionNumberOfMovies"
-                        id="genreSelectionNumberOfMovies" class="genreSelection">
+                        id="genreSelectionNumberOfMovies"
+                        class="genreSelection">
                         <option value="all">All Genres</option>
                     </select>
                 </div>
@@ -202,8 +209,7 @@
                 <div class="row text-center">
                     <h2>Initial Idea</h2>
                     <p>
-                        
-                        
+
                     </p>
                 </div>
             </div>
@@ -215,7 +221,10 @@
                         href="https://www.kaggle.com/datasets/ashutoshdevpura/imdb-top-10000-movies-updated-august-2023">IMDB
                         Top 10'000 movies dataset</a>
                     released on Kaggle.<br>
-                    Additionally, the movie posters and the actor images were taken from <a href="https://www.themoviedb.org/?language=en-US">The Movie DB API</a>.
+                    Additionally, the movie posters and the actor images were
+                    taken from <a
+                        href="https://www.themoviedb.org/?language=en-US">The
+                        Movie DB API</a>.
                 </p>
             </div>
             <div class="row text-center">
@@ -224,9 +233,110 @@
                 <!-- section with references to relevant information on your research topic together with findings -->
             </div>
             <div class="row text-center">
-                <h2 id="visualDesign">Visual Design</h2>
-                <!-- TODO Lenny -->
-                <!-- why choose colors diagrams etc.-->
+                <h2 id="visualDesign">Visual Design Choices</h2>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card card-spacing">
+                                <div class="card-body">
+                                    <p class="text-center">
+                                        <strong>2. Treemap</strong>
+                                    </p>
+                                    <p class="description text-center">
+
+                                        The visualization's design is
+                                        thoughtfully chosen to
+                                        align with established principles.
+                                        It employs foundational visual design
+                                        concepts, using
+                                        color and space efficiently to
+                                        differentiate data and
+                                        enhance user interaction.
+                                        The high data-ink ratio respects Tufte's
+                                        principles,
+                                        avoiding nonessential decorative
+                                        elements and focusing
+                                        on data representation.
+                                        In tune with human perception, the
+                                        familiar formats of
+                                        scatterplots and bar charts facilitate
+                                        quick
+                                        understanding and insight.
+                                        Designed for specific tasks in data
+                                        visualization, it
+                                        allows for comparative analysis, trend
+                                        observation, and
+                                        detailed examination of individual data
+                                        points.
+                                        Lastly, the interaction concept is well
+                                        integrated,
+                                        inviting users to engage with the data
+                                        through
+                                        filtering, clicking, and brushing to
+                                        explore deeper
+                                        narratives within the data set.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card card-spacing">
+                                <div class="card-body">
+                                    <p class="text-center"><strong>2.
+                                            Treemap</strong></p>
+                                    <p class="description text-center">
+                                        The treemap uses size to reflect box
+                                        office success, with interactive titles
+                                        revealing
+                                        movie posters for added context without
+                                        clutter, embracing Tufte's data depth
+                                        ideal.
+                                        A single-color scheme focuses attention
+                                        on revenue, in line with Tufte's
+                                        data-ink ratio, simplifying
+                                        interpretation.
+                                        A "Low to High Income" legend aids quick
+                                        income level assessment, while the genre
+                                        filter
+                                        enhances data exploration and
+                                        comparison, streamlining user
+                                        interaction and visual clarity.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card card-spacing">
+                                <div class="card-body">
+                                    <p class="text-center"><strong>3.
+                                            Linecharts</strong></p>
+                                    <p class="description text-center">
+                                        This line chart pairing contrasts movie
+                                        release volume and average income over
+                                        time,
+                                        enhanced by a genre filter and ratings
+                                        slider for customized data exploration.
+                                        The minimalist design with clear trend
+                                        lines
+                                        and noted data bounds maximizes data
+                                        visibility and user clarity, in line
+                                        with
+                                        Tufte's principles.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <div class="row">
                 <h2 id="team" class="text-center">Team</h2>
@@ -237,7 +347,8 @@
                         <div class="card-body text-center">
                             <h5 class="card-title mb-0">Lenny Budliger</h5>
                             <div class="card-text text-black-50">
-                                <a href="mailto:lenny.Budliger@stud.hslu.ch">lenny.budliger@stud.hslu.ch</a>
+                                <a
+                                    href="mailto:lenny.Budliger@stud.hslu.ch">lenny.budliger@stud.hslu.ch</a>
                             </div>
                             <div class="card-text text-black-50">HSLU Student
                                 (8. Semester)</div>
@@ -251,7 +362,8 @@
                         <div class="card-body text-center">
                             <h5 class="card-title mb-0">Yannis Krämer</h5>
                             <div class="card-text text-black-50">
-                                <a href="mailto:yannis.kraemer@stud.hslu.ch">yannis.kraemer@stud.hslu.ch</a>
+                                <a
+                                    href="mailto:yannis.kraemer@stud.hslu.ch">yannis.kraemer@stud.hslu.ch</a>
                             </div>
                             <div class="card-text text-black-50">HSLU Student
                                 (8. Semester)</div>
@@ -304,3 +416,22 @@
     </body>
 
 </html>
+
+The visualization's design is thoughtfully chosen to
+align with established principles.
+It employs foundational visual design concepts, using
+color and space efficiently to differentiate data and
+enhance user interaction.
+The high data-ink ratio respects Tufte's principles,
+avoiding nonessential decorative elements and focusing
+on data representation.
+In tune with human perception, the familiar formats of
+scatterplots and bar charts facilitate quick
+understanding and insight.
+Designed for specific tasks in data visualization, it
+allows for comparative analysis, trend observation, and
+detailed examination of individual data points.
+Lastly, the interaction concept is well integrated,
+inviting users to engage with the data through
+filtering, clicking, and brushing to explore deeper
+narratives within the data set.
