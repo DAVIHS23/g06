@@ -1,10 +1,12 @@
 body {
     background-color: #FEFEFE;
 }
+
 #topCarousel {
     max-height: 50vh;
     overflow: hidden;
 }
+
 .carousel-caption {
     position: absolute;
     top: 50%;
@@ -12,28 +14,31 @@ body {
     transform: translate(-50%, -50%);
     z-index: 1;
 }
+
 svg {
     max-width: 100%;
-    width:100% !important;
-    display: block!important;
+    width: 100% !important;
+    display: block !important;
     /* height: auto; */
 }
+
 .img_overlay {
-    position:absolute;
-    top:0;
-    left:0;
-    height:0;
-    bottom:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.2);
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
 }
 
 .incomeTreeMap {
     width: 100%;
 }
+
 .incomeTreeMap svg {
-    cursor:pointer;
+    cursor: pointer;
 }
 
 .horizontalGrid {
@@ -45,7 +50,8 @@ svg {
 }
 
 #ratingSlider {
-    background-color:white;
+    background-color: white;
+
     .noUi-handle {
         background-color: #198038;
     }
@@ -56,21 +62,22 @@ svg {
 }
 
 .scatterPlot svg {
-    width: 650px!important;
+    width: 650px !important;
     max-width: 100%;
-    margin:auto;
+    margin: auto;
 }
 
 #minRatingDisplay {
     margin-right: 20px;
 }
+
 #maxRatingDisplay {
     margin-left: 20px;
 }
 
 .selected {
-    stroke: red; 
-    stroke-width: 2; 
+    stroke: red;
+    stroke-width: 2;
 }
 
 .movie-details {
@@ -78,64 +85,58 @@ svg {
     border-radius: 4px;
     padding: 20px;
     margin: 10px;
-    overflow-x: auto; 
+    overflow-x: auto;
 }
 
 .actors-container {
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
-    overflow-x: auto; 
-   
+    overflow-x: auto;
+
 }
 
 .actor {
-    width: calc(20% - 10px); 
-    margin-right: 10px; 
+    width: calc(20% - 10px);
+    margin-right: 10px;
     display: flex;
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: space-between; 
-    flex-shrink: 0; 
-    white-space: normal; 
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    white-space: normal;
 }
 
 .actor img {
-    max-width: 100%; 
-    height: auto; 
+    max-width: 100%;
+    height: auto;
     border-radius: 3px;
-    align-self: flex-end; 
+    align-self: flex-end;
 }
 
 .actor h4 {
     font-size: 0.7em;
     margin-top: 5px;
-    margin-bottom: 0; 
-    text-align: center; 
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    align-self: flex-start; 
+    margin-bottom: 0;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    align-self: flex-start;
 }
-
 
 .card {
     background: none;
     border: none;
- 
+
     padding: 5px;
-  }
-  
-  .card-body {
+}
+
+.card-body {
     padding: 15px;
-  }
-  
-  .card-spacing {
-    margin-bottom: 5px; /* Adjust the space as needed */
+}
+
+.card-spacing {
+    margin-bottom: 5px;
+    /* Adjust the space as needed */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-
-
-
-
-
+}
