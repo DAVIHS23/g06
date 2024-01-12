@@ -45,9 +45,6 @@
                             <a class="nav-link" href="#backgroundInformation">Background information</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#sources">Sources</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="#references">References</a>
                         </li>
                         <li class="nav-item">
@@ -98,6 +95,9 @@
                         uncover genre trends.
                         Filter by year and discover patterns within four
                         color-coded rating and income clusters.
+                        <br>
+                        The colors in the scatterplot differentiate between four categories within their year.
+                        Blue represents the high performers, green means low performers, pink is medium, and violet are the movies that were well received but had a low income (niche films, insiders tip).
                     </p>
                 </div>
                 <div>
@@ -224,32 +224,53 @@
         <div class="container">
             <div class="row text-center">
                 <h2 id="backgroundInformation">Background information and initial idea</h2>
-                <!--TODO: add initial sketch Yannis-->
-                <div class="row text-center">
-                    <h2>Initial Idea</h2>
-                    <p>
-
-                    </p>
+                <p>
+                    This website is a project from the HSLU course "Data Visualization (DAVI)".
+                    The goal is to create a functional visualization of a dataset of our choice.
+                    Our team decided to use the IMDB Top 10'000 movies dataset available on Kaggle.
+                </p>
+                <p>
+                    This visualization helps investors, producers, actors and movie enthusiasts to find new genre and movie trends, so that they are able to make informed decisions.
+                    The initial idea consisted of basic digital sketches of the different visualizations.
+                    These ideas were refined over the semester and lead to the current version of this website.
+                </p>
+                <div class="col-xl-6 col-md-6 mb-12">
+                    <div class="card border-0 shadow">
+                        <img src="img/treemapSketch.png" alt="Treemap sketch"
+                            class="card-img-top">
+                        <div class="card-body text-center">
+                            <h5 class="card-title mb-0">Treemap sketch</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-md-6 mb-12">
+                    <div class="card border-0 shadow">
+                        <img src="img/scatterPlotSketch.png" alt="Scatterplot sketch"
+                            class="card-img-top">
+                        <div class="card-body text-center">
+                            <h5 class="card-title mb-0">Scatterplot sketch</h5>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row text-center">
-                <h2 id="sources">Sources</h2>
+                <h2 id="references">References</h2>
                 <p>
                     The main source for this project is the
-                    <a
-                        href="https://www.kaggle.com/datasets/ashutoshdevpura/imdb-top-10000-movies-updated-august-2023">IMDB
-                        Top 10'000 movies dataset</a>
-                    released on Kaggle.<br>
-                    Additionally, the movie posters and the actor images were
-                    taken from <a
-                        href="https://www.themoviedb.org/?language=en-US">The
-                        Movie DB API</a>.
+                    <a href="https://www.kaggle.com/datasets/ashutoshdevpura/imdb-top-10000-movies-updated-august-2023">
+                        IMDB Top 10'000 movies dataset
+                    </a>
+                    released on Kaggle.
+                    The dataset contains information about the movies, such as the title, the year of release, the genre, the actors, the runtime, the ratings and the income.
+                    The income can be missing for some movies.
+                    <br>
+                    Additionally, the movie posters and the actor images are
+                    loaded from the
+                    <a href="https://www.themoviedb.org/?language=en-US">
+                        The Movie DB API
+                    </a>
+                    .
                 </p>
-            </div>
-            <div class="row text-center">
-                <h2 id="references">References</h2>
-                <!-- TODO Yannis-->
-                <!-- section with references to relevant information on your research topic together with findings -->
             </div>
             <div class="row text-center">
                 <h2 id="visualDesign">Visual Design Choices</h2>
@@ -432,25 +453,4 @@
             </div>
         </div>
     </body>
-
 </html>
-
-<!-- TODO: remove this text or not??? -->
-The visualization's design is thoughtfully chosen to
-align with established principles.
-It employs foundational visual design concepts, using
-color and space efficiently to differentiate data and
-enhance user interaction.
-The high data-ink ratio respects Tufte's principles,
-avoiding nonessential decorative elements and focusing
-on data representation.
-In tune with human perception, the familiar formats of
-scatterplots and bar charts facilitate quick
-understanding and insight.
-Designed for specific tasks in data visualization, it
-allows for comparative analysis, trend observation, and
-detailed examination of individual data points.
-Lastly, the interaction concept is well integrated,
-inviting users to engage with the data through
-filtering, clicking, and brushing to explore deeper
-narratives within the data set.
