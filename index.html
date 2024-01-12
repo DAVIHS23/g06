@@ -23,6 +23,20 @@
 
     <body>
         <!-- TODO: add navigation Yannis -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#topCarousel">Home</a>
+                <a class="navbar-brand" href="#highestGrossingMovies">Highest Grossing Movies</a>
+                <a class="navbar-brand" href="#"></a>
+                <a class="navbar-brand" href="#"></a>
+                <a class="navbar-brand" href="#"></a>
+                <a class="navbar-brand" href="#"></a>
+                <a class="navbar-brand" href="#visualDesign">Visual Design</a>
+                <a class="navbar-brand" href="#team">Team</a>
+                <a class="navbar-brand" href="#tools">Tools</a>
+            </div>
+        </nav>
+
         <div id="topCarousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
@@ -78,11 +92,11 @@
                 <!-- Movie Factsheet Column -->
                 <div class="col-md-6 col-lg-6">
                     <div class="movieFactsheet">
-                        <div id="movieDetails" class="movie-details"><div
-                                class="text-center" id="movieDetailsDesc">Click
-                                on a point on the scatter plot to show movie
-                                details</div></div>
-
+                        <div id="movieDetails" class="movie-details">
+                            <div class="text-center" id="movieDetailsDesc">
+                                Click on a point on the scatter plot to show movie details
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -116,7 +130,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 col-lg-12 mx-auto">
-                    <h2 class="text-center mt-3">Highest Grossing Movies</h2>
+                    <h2 id="highestGrossingMovies" class="text-center mt-3">Highest Grossing Movies</h2>
                     <div class="d-flex justify-content-between mt-3">
                         <select name="genreSelectionIncomeTreeMap"
                             id="genreSelectionIncomeTreeMap"
@@ -168,9 +182,8 @@
                 </div>
                 <div class="col-md-12 col-lg-6">
                     <h3 class="text-center">Income Per Year</h3>
-                    <!-- TODO: add millions or billions unit Yannis -->
                     <div class="text-center">
-                        This diagram shows the average income per year (filtered
+                        This diagram shows the average income in millions per year per movie (filtered
                         by your criteria).
                         <br>
                         <span class="text-danger">Note:</span> Some movies have
@@ -211,12 +224,12 @@
                 <!-- section with references to relevant information on your research topic together with findings -->
             </div>
             <div class="row text-center">
-                <h2>Visual Design</h2>
+                <h2 id="visualDesign">Visual Design</h2>
                 <!-- TODO Lenny -->
                 <!-- why choose colors diagrams etc.-->
             </div>
             <div class="row">
-                <h2 class="text-center">Team</h2>
+                <h2 id="team" class="text-center">Team</h2>
                 <div class="col-xl-6 col-md-6 mb-12">
                     <div class="card border-0 shadow">
                         <img src="img/lennyBudligerPortrait.jpg"
@@ -247,7 +260,7 @@
                 </div>
             </div>
             <div class="row text-center" style="margin-top: 20px;">
-                <h2>Tools</h2>
+                <h2 id="tools">Tools</h2>
                 <div>The libraries and tools that were used for this project:</div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
@@ -268,8 +281,10 @@
                             noUiSlider
                         </a>
                     </li>
-                    <li>
-                        <a href="https://www.themoviedb.org/?language=en-US">The Movie DB API</a>
+                    <li class="list-group-item">
+                        <a href="https://www.themoviedb.org/?language=en-US">
+                            The Movie DB API
+                        </a>
                     </li>
                     <li class="list-group-item">
                         <a
