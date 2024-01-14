@@ -140,15 +140,15 @@ function createGrossIncomeTreeMap(filteredData) {
         .style("font-size", "10px")
         .style("fill", "white");
 
-    
+
     const legendWidth = 300;
     const legendHeight = 20;
 
     const legendSvg = d3.select('.incomeTreeMap')
         .append('svg')
         .attr('width', legendWidth)
-        .attr('height', legendHeight + 40)  
-        .attr('transform', `translate(0, ${legendHeight*0.4})`);  
+        .attr('height', legendHeight + 40)
+        .attr('transform', `translate(0, ${legendHeight * 0.4})`);
 
     const gradient = legendSvg.append('defs')
         .append('linearGradient')
@@ -175,13 +175,13 @@ function createGrossIncomeTreeMap(filteredData) {
 
     legendSvg.append('text')
         .attr('x', 0)
-        .attr('y', legendHeight + 15)  
+        .attr('y', legendHeight + 15)
         .text('Low Income')
         .style('font-size', '10px');
 
     legendSvg.append('text')
         .attr('x', legendWidth)
-        .attr('y', legendHeight + 15)  
+        .attr('y', legendHeight + 15)
         .attr('text-anchor', 'end')
         .text('High Income')
         .style('font-size', '10px');
@@ -358,6 +358,8 @@ function fillYearSelections(data) {
             const option = document.createElement('option');
             option.value = year;
             option.textContent = year;
+
+
             dropdown.appendChild(option);
         });
     });
@@ -413,16 +415,21 @@ function connectGenreSelectionToLinePlot(data) {
 
 function connectYearSelectionToScatterPlot(data, stardata) {
     const select = d3.select("#yearSelection");
-    select.on("change", function () {
-        const selectedYear = this.value;
+
+    select.property("value", "2019");
+
+    function handleYearChange() {
+        const selectedYear = select.node().value;
         console.log("Selected Year: " + selectedYear);
         const filteredData = filterDataByYear(data, selectedYear);
-
-
         console.log("filtered data year: ", filteredData);
         createScatterPlotGrossRating(filteredData, stardata);
-    });
-    createScatterPlotGrossRating(data, stardata);
+    }
+
+    select.on("change", handleYearChange);
+
+
+    handleYearChange();
 }
 
 function filterDataByGenre(data, genresAsArray) {

@@ -97,10 +97,13 @@
                         color-coded rating and income clusters.
                         <br>
                         <br>
-                        The dataset has been clustered into four cluster for each year using a clustering algorithm. The colors help to distinguishing between high performers (high rating and earnings), 
+                        The dataset has been clustered into four cluster for each year 
+                        using a clustering algorithm. The colors help to distinguishing 
+                        between high performers (high rating and gross), 
                         low performers, typical performers, and niche films 
-                        (high rating but low earnings).
-                        A legend is not provided because the clustering results vary each year, making it impossible to establish a fixed color legend different years.
+                        (high rating but low gross).
+                        A legend is not provided because the clustering results vary each year,
+                        making it impossible to establish a fixed color legend different years.
                     </p>
                 </div>
                 <div>
@@ -136,19 +139,19 @@
                 <div class="col-md-12 col-lg-6">
                     <h2>Most Star Appearances</h2>
                     <div class="text-center">
-                        This bar chart shows the 10 most appearing actors. The red line shows in how many movies an actor appeared on average
+                        This bar chart shows the 10 most appearing actors in the whole dataset. The red line shows in how many movies an actor appeared on average
                         <span id="averageAppearances"></span>.
                     </div>
                     <div class="text-center">
-                        <b>Click a point</b> on the scatterplot to filter for the movie's cast.
+                        <b>Click a point</b> on the scatterplot to filter for the movie's cast and to analyze how often the actors are seen in other movies compared to the average.
                     </div>
                     <div class="barChart"></div>
                 </div>
                 <!-- Top Genre Combinations Chart -->
                 <div class="col-md-12 col-lg-6">
                     <h2>Most Genre Combinations</h2>
-                    <div class="text-center">This bar chart displays the 10 most frequent genre combinations found in movies, ranking them from most to least common. 
-                    <b>Select an area by brushing</b> on the associated scatterplot to further explore. </div>
+                    <div class="text-center">This bar chart displays the 10 most frequent genre combinations found in movies for the selected year, ranking them from most to least common. 
+                    <b>Select an area by brushing</b> on the associated scatterplot to explore a specific subset of movies. </div>
                     <div class="barChartGenre"></div>
                 </div>
             </div>
