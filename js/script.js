@@ -1024,7 +1024,7 @@ function createGenreCombinationBarChart(data) {
     var g;
     if (svg.empty()) {
         var svgWidth = 460;
-        var svgHeight = 400;
+        var svgHeight = 470;
         svg = d3.select(".barChartGenre")
             .append("svg")
             .attr("viewBox", `0 0 ${svgWidth} ${svgHeight}`)

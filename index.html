@@ -91,13 +91,16 @@
                     <p class="description text-center">
                         Explore the scatterplot to see how movies fare in
                         ratings versus earnings.
-                        Click a point for movie details, or brush to select and
+                        <b>Click a point</b> for movie details, or <b>brush</b> to select and
                         uncover genre trends.
-                        Filter by year and discover patterns within four
+                        <b>Filter by year</b> and discover patterns within four
                         color-coded rating and income clusters.
                         <br>
-                        The colors in the scatterplot differentiate between four categories within their year.
-                        Blue represents the high performers, green means low performers, pink is medium, and violet are the movies that were well received but had a low income (niche films, insiders tip).
+                        <br>
+                        The dataset has been clustered into four cluster for each year using a clustering algorithm. The colors help to distinguishing between high performers (high rating and earnings), 
+                        low performers, typical performers, and niche films 
+                        (high rating but low earnings).
+                        A legend is not provided because the clustering results vary each year, making it impossible to establish a fixed color legend different years.
                     </p>
                 </div>
                 <div>
@@ -119,7 +122,7 @@
                     <div class="movieFactsheet">
                         <div id="movieDetails" class="movie-details">
                             <div class="text-center" id="movieDetailsDesc">
-                                Click on a point on the scatter plot to show movie details
+                                <b>Click on a point</b> on the scatter plot to show movie details
                             </div>
                         </div>
                     </div>
@@ -133,12 +136,11 @@
                 <div class="col-md-12 col-lg-6">
                     <h2>Most Star Appearances</h2>
                     <div class="text-center">
-                        Red line shows average
-                        <span id="averageAppearances"></span>
-                        over all actors in the database.
+                        This bar chart shows the 10 most appearing actors. The red line shows in how many movies an actor appeared on average
+                        <span id="averageAppearances"></span>.
                     </div>
                     <div class="text-center">
-                        Click on point on scatterplot for details
+                        <b>Click a point</b> on the scatterplot to filter for the movie's cast.
                     </div>
                     <div class="barChart"></div>
                 </div>
@@ -146,7 +148,7 @@
                 <div class="col-md-12 col-lg-6">
                     <h2>Most Genre Combinations</h2>
                     <div class="text-center">This bar chart displays the 10 most frequent genre combinations found in movies, ranking them from most to least common. 
-                        Selecting an area on the associated scatterplot to further explore </div>
+                    <b>Select an area by brushing</b> on the associated scatterplot to further explore. </div>
                     <div class="barChartGenre"></div>
                 </div>
             </div>
@@ -163,8 +165,8 @@
                             <option value="all">All Genres</option>
                         </select>
                     </div>
-                    <div class="text-center">(Click for movie poster for
-                        inspiration)</div>
+                    <div class="text-center"><b>Click on a tile</b> for movie poster for
+                        inspiration or <b>filter by genre</b></div>
                     <div class="incomeTreeMap mt-3"></div>
                 </div>
             </div>
@@ -280,7 +282,7 @@
                             <div class="card card-spacing">
                                 <div class="card-body">
                                     <p class="text-center">
-                                        <strong>1. Treemap</strong>
+                                        <strong>1. Scatterplot and Bar Charts</strong>
                                     </p>
                                     <p class="description text-center">
                                         The visualization's design is
